@@ -1,0 +1,87 @@
+{
+  "name": "react-fastclick",
+  "version": "1.0.0",
+  "description": "Fast Touch Events for React",
+  "main": "index.js",
+  "scripts": {
+    "test": "jshint index.js && jscs index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JakeSidSmith/react-fastclick"
+  },
+  "keywords": [
+    "react",
+    "fast",
+    "click",
+    "touch",
+    "events",
+    "mobile"
+  ],
+  "author": "Jake 'Sid' Smith",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JakeSidSmith/react-fastclick/issues"
+  },
+  "homepage": "https://github.com/JakeSidSmith/react-fastclick",
+  "dependencies": {
+    "react": "0.13.3"
+  },
+  "devDependencies": {
+    "jscs": "=1.13.1",
+    "jshint": "=2.8.0"
+  },
+  "jshintConfig": {
+    "browserify": true,
+    "unused": true,
+    "undef": true,
+    "globals": {
+      "console": false
+    }
+  },
+  "jscsConfig": {
+    "disallowMultipleVarDecl": "exceptUndefined",
+    "validateQuoteMarks": {
+      "mark": "'",
+      "escape": false
+    },
+    "validateParameterSeparator": ", ",
+    "validateIndentation": 2,
+    "requireSpacesInFunction": {
+      "beforeOpeningRoundBrace": true,
+      "beforeOpeningCurlyBrace": true
+    },
+    "requireSpacesInConditionalExpression": {
+      "afterTest": true,
+      "beforeConsequent": true,
+      "afterConsequent": true,
+      "beforeAlternate": true
+    },
+    "disallowTrailingWhitespace": true,
+    "maximumLineLength": 100,
+    "requireCurlyBraces": [
+      "if",
+      "else",
+      "for",
+      "while",
+      "do",
+      "try",
+      "catch"
+    ],
+    "disallowMixedSpacesAndTabs": true,
+    "requireSpaceBeforeBinaryOperators": true,
+    "safeContextKeyword": [
+      "self"
+    ],
+    "disallowMultipleLineBreaks": true,
+    "disallowMultipleLineStrings": true,
+    "disallowSpaceAfterObjectKeys": true,
+    "disallowNewlineBeforeBlockStatements": true,
+    "disallowTrailingComma": true,
+    "requireCommaBeforeLineBreak": true,
+    "requireSpaceBetweenArguments": true,
+    "requireSpaceBeforeBlockStatements": true,
+    "requireSpaceBeforeObjectValues": true,
+    "requireSpacesInForStatement": true
+  }
+}

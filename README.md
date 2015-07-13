@@ -40,9 +40,11 @@ React.render(<App />, document.body);
 
 ## Notes
 
-The event triggered on touch devices is currently the same event for `touchend`, and will have `event.type` `touchend`. This also means that it wont have any mouse / touch coordinates (e.g. `event.touches`, `clientX`, `pageX`).
+1. The event triggered on touch devices is currently the same event for `touchend`, and will have `event.type` `touchend`. This also means that it wont have any mouse / touch coordinates (e.g. `event.touches`, `clientX`, `pageX`).
 
-I will be creating synthetic events for these shortly wwith the most recent touch / mouse coords.
+    I will be creating synthetic events for these shortly with the most recent touch / mouse coords.
+
+2. On some devices the elements flicker after being touched. This can be prevented by calling `event.preventDefault()`.
 
 ## Support
 

@@ -91,7 +91,7 @@
         target.addEventListener(constants.touchstart, onTouchStart, false);
         return {
           remove: function () {
-            // Remove oriringal click listeners
+            // Remove original click listeners
             originalListener();
             target.removeEventListener(constants.touchstart, onTouchStart, false);
           }

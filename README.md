@@ -48,4 +48,4 @@ React.render(<App />, document.body);
 
 ## Support
 
-Current only tested with React 0.13.3
+Currently only tested with React 0.13.3

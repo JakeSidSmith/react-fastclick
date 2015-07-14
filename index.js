@@ -17,6 +17,22 @@
     moveThreshold: 20
   };
 
+  var addListener = function (target, eventType, callback) {
+    if (target.addEventListener) {
+      target.addEventListener(eventType, callback, false);
+    } else if (target.attachEvent) {
+      target.attachEvent('on' + eventType, callback, false);
+    }
+  };
+
+  var removeListener = function (target, eventType, callback) {
+    if (target.removeEventListener) {
+      target.removeEventListener(eventType, callback, false);
+    } else if (target.detachEvent) {
+      target.detachEvent('on' + eventType, callback, false);
+    }
+  };
+
   // Create new listen method
   EventListener.listen = function (target, eventType, callback) {
     if (eventType === 'click') {
@@ -27,13 +43,8 @@
 
       var onTouchEnd = function (event) {
         // Remove touch listeners
-        if (window.removeEventListener) {
-          window.removeEventListener(constants.touchend, onTouchEnd);
-          window.removeEventListener(constants.touchmove, onTouchMove);
-        } else if (window.detachEvent) {
-          window.detachEvent('on' + constants.touchend, onTouchEnd);
-          window.detachEvent('on' + constants.touchmove, onTouchMove);
-        }
+        removeListener(window, constants.touchend, onTouchEnd);
+        removeListener(window, constants.touchmove, onTouchMove);
 
         if (!moved) {
           // If not moved - callback & prevent mouse events
@@ -67,13 +78,8 @@
         moved = false;
 
         // Add touch listeners
-        if (window.addEventListener) {
-          window.addEventListener(constants.touchend, onTouchEnd);
-          window.addEventListener(constants.touchmove, onTouchMove);
-        } else if (window.attachEvent) {
-          window.attachEvent('on' + constants.touchend, onTouchEnd);
-          window.attachEvent('on' + constants.touchmove, onTouchMove);
-        }
+        addListener(window, constants.touchend, onTouchEnd);
+        addListener(window, constants.touchmove, onTouchMove);
       };
 
       // Wrap click callback
@@ -85,27 +91,17 @@
       };
 
       // Get original click listener remove function
-      var originalListener = listen(target, eventType, onClick);
+      var removeOriginalListener = listen(target, eventType, onClick);
 
-      if (target.addEventListener) {
-        target.addEventListener(constants.touchstart, onTouchStart, false);
-        return {
-          remove: function () {
-            // Remove original click listeners
-            originalListener();
-            target.removeEventListener(constants.touchstart, onTouchStart, false);
-          }
-        };
-      } else if (target.attachEvent) {
-        target.attachEvent('on' + constants.touchstart, onTouchStart);
-        return {
-          remove: function () {
-            // Remove oriringal click listeners
-            originalListener();
-            target.detachEvent('on' + constants.touchstart, onTouchStart);
-          }
-        };
-      }
+      addListener(target, constants.touchstart, onTouchStart);
+
+      // Return remove listener functions
+      return {
+        remove: function () {
+          removeOriginalListener();
+          removeListener(target, constants.touchstart, onTouchStart);
+        }
+      };
     } else {
       return listen(target, eventType, callback);
     }

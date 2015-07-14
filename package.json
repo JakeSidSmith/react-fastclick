@@ -12,10 +12,12 @@
   },
   "keywords": [
     "react",
+    "fastclick",
     "fast",
     "click",
     "touch",
     "events",
+    "event",
     "mobile"
   ],
   "author": "Jake 'Sid' Smith",

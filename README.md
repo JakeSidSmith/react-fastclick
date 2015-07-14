@@ -44,12 +44,12 @@ React.render(<App />, document.body);
 
     I will be creating synthetic events for these shortly with the most recent touch / mouse coords.
 
-2. On some devices the elements flicker after being touched. This can be prevented by calling `event.preventDefault()`. Example Below:
+2. On some devices the elements flicker after being touched. This can be prevented by setting the css property `-webkit-tap-highlight-color` to transparent.
+Either target `html, body` (to prevent the flickering on all elements) or target the specific element you don't want to flicker e.g. `button`.
 
-```javascript
-logEventType: function (event) {
-  event.preventDefault(); // Prevent Flickering
-  console.log(event.type);
+```css
+html, body {
+  -webkit-tap-highlight-color: transparent;
 }
 ```
 

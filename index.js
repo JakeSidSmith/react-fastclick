@@ -95,6 +95,7 @@
 
       addListener(target, constants.touchstart, onTouchStart);
 
+      // Return remove listener functions
       return {
         remove: function () {
           removeOriginalListener();

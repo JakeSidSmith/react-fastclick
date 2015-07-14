@@ -44,7 +44,14 @@ React.render(<App />, document.body);
 
     I will be creating synthetic events for these shortly with the most recent touch / mouse coords.
 
-2. On some devices the elements flicker after being touched. This can be prevented by calling `event.preventDefault()`.
+2. On some devices the elements flicker after being touched. This can be prevented by calling `event.preventDefault()`. Example Below:
+
+```javascript
+logEventType: function (event) {
+  event.preventDefault(); // Prevent Flickering
+  console.log(event.type);
+}
+```
 
 ## Support
 

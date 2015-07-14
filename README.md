@@ -1,4 +1,5 @@
 # React Fastclick
+[![Build Status](https://travis-ci.org/JakeSidSmith/react-fastclick.svg?branch=master)](https://travis-ci.org/JakeSidSmith/react-fastclick)
 
 **Instantly make your desktop / hybrid apps more responsive on touch devices.**
 

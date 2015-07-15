@@ -91,14 +91,16 @@
       };
 
       // Get original click listener remove function
-      var removeOriginalListener = listen(target, eventType, onClick);
+      var originalListener = listen(target, eventType, onClick);
 
       addListener(target, constants.touchstart, onTouchStart);
 
       // Return remove listener functions
       return {
         remove: function () {
-          removeOriginalListener();
+          if (originalListener && typeof originalListener.remove === 'function') {
+            originalListener.remove();
+          }
           removeListener(target, constants.touchstart, onTouchStart);
         }
       };

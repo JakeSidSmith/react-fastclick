@@ -52,11 +52,11 @@ React.render(<App />, document.body);
 2. On some devices the elements flicker after being touched. This can be prevented by setting the css property `-webkit-tap-highlight-color` to transparent.
 Either target `html, body` (to prevent the flickering on all elements) or target the specific element you don't want to flicker e.g. `button`.
 
-```css
-html, body {
-  -webkit-tap-highlight-color: transparent;
-}
-```
+    ```css
+    html, body {
+      -webkit-tap-highlight-color: transparent;
+    }
+    ```
 
 ## Support
 

@@ -62,4 +62,4 @@ Either target `html, body` (to prevent the flickering on all elements) or target
 
 ## Support
 
-Currently only tested with React 0.13.3
+Currently only tested with React 0.12.x & 0.13.x

@@ -30,8 +30,8 @@
     "react": "0.13.3"
   },
   "devDependencies": {
-    "jscs": "1.13.1",
-    "jshint": "2.8.0"
+    "jscs": "=1.13.1",
+    "jshint": "=2.8.0"
   },
   "jshintConfig": {
     "browserify": true,

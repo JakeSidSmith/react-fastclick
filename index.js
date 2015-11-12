@@ -42,6 +42,7 @@
       var touched = false;
 
       var onTouchEnd = function (event) {
+        event.preventDefault();
         // Remove touch listeners
         removeListener(window, constants.touchend, onTouchEnd);
         removeListener(window, constants.touchmove, onTouchMove);

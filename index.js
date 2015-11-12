@@ -42,8 +42,8 @@
       var touched = false;
 
       var onTouchEnd = function (event) {
+        event.preventDefault();
         // Remove touch listeners
-        removeListener(window, constants.touchend, onTouchEnd);
         removeListener(window, constants.touchmove, onTouchMove);
 
         if (!moved) {
@@ -78,7 +78,6 @@
         moved = false;
 
         // Add touch listeners
-        addListener(window, constants.touchend, onTouchEnd);
         addListener(window, constants.touchmove, onTouchMove);
       };
 
@@ -93,6 +92,7 @@
       // Get original click listener remove function
       var originalListener = listen(target, eventType, onClick);
 
+      addListener(target, constants.touchend, onTouchEnd);
       addListener(target, constants.touchstart, onTouchStart);
 
       // Return remove listener functions
@@ -101,7 +101,10 @@
           if (originalListener && typeof originalListener.remove === 'function') {
             originalListener.remove();
           }
+          removeListener(target, constants.touchend, onTouchEnd);
           removeListener(target, constants.touchstart, onTouchStart);
+          removeListener(window, constants.touchmove, onTouchMove);
+          clearTimeout(touchedTimeout);
         }
       };
     } else {

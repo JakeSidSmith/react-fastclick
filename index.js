@@ -103,6 +103,8 @@
           }
           removeListener(target, constants.touchend, onTouchEnd);
           removeListener(target, constants.touchstart, onTouchStart);
+          removeListener(window, constants.touchmove, onTouchMove);
+          clearTimeout(touchedTimeout);
         }
       };
     } else {

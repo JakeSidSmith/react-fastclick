@@ -1,6 +1,6 @@
 {
   "name": "react-fastclick",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Fast Touch Events for React",
   "main": "index.js",
   "scripts": {

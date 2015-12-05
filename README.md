@@ -5,6 +5,12 @@
 
 React Fastclick automatically adds fastclick touch events to elements with onClick attributes to prevent the delay that occurs on some touch devices.
 
+## Versions
+
+Version `2.0.0` and upwards are designed to support React 0.14 and upwards, but have not been tested on older versions.
+
+For React versions lower than 0.14 please install react-fastclick version `1.0.3`
+
 ## Installation
 
 Use npm to install react-fastclick

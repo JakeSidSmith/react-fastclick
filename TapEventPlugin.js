@@ -110,6 +110,9 @@ var TapEventPlugin = {
       startCoords.x = 0;
       startCoords.y = 0;
     }
+    if (event && event.type === 'touchend' && typeof event.preventDefault === 'function') {
+      event.preventDefault();
+    }
     EventPropagators.accumulateTwoPhaseDispatches(event);
     return event;
   }

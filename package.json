@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/JakeSidSmith/react-fastclick",
   "dependencies": {
+    "fbjs": "^0.2.0",
     "react": ">=0.14.0"
   },
   "devDependencies": {

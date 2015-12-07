@@ -1,6 +1,6 @@
 {
   "name": "react-fastclick",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Fast Touch Events for React",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,8 @@
   },
   "homepage": "https://github.com/JakeSidSmith/react-fastclick",
   "dependencies": {
-    "react": ">=0.12.0"
+    "fbjs": "^0.2.0",
+    "react": ">=0.14.0"
   },
   "devDependencies": {
     "jscs": "=1.13.1",

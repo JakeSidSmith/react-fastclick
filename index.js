@@ -121,7 +121,7 @@
       this.removeListeners();
     },
 
-    onCancel: function (event) {
+    onCancel: function () {
       console.log('Cancel');
 
       touchEvents.touched = true;
@@ -188,7 +188,7 @@
       args[1] = {
         type: type,
         props: props
-      }
+      };
       // Replace type with FastClick
       args[0] = FastClickWrapper;
     }
@@ -196,6 +196,5 @@
     // Apply args to original createElement function
     return originalCreateElement.apply(null, args);
   };
-
 
 })();

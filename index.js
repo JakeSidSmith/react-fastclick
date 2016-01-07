@@ -3,19 +3,8 @@
 (function () {
 
   var React = require('react');
-  var EventListener = require('react/lib/EventListener');
 
-  React.initializeTouchEvents(true);
-
-  // Save original listen method
-  var listen = EventListener.listen;
-
-  var constants = {
-    touchstart: 'touchstart',
-    touchend: 'touchend',
-    touchmove: 'touchmove',
-    moveThreshold: 20
-  };
+  var originalCreateElement = React.createElement;
 
   var addListener = function (target, eventType, callback) {
     if (target.addEventListener) {
@@ -33,80 +22,180 @@
     }
   };
 
-  // Create new listen method
-  EventListener.listen = function (target, eventType, callback) {
-    if (eventType === 'click') {
-      var downPos;
-      var touchedTimeout;
-      var moved = false;
-      var touched = false;
+  // Moved if Math.abs(downX - upX) > MOVE_THRESHOLD;
+  var MOVE_THRESHOLD = 8;
+  var TOUCH_DELAY = 1000;
 
-      var onTouchEnd = function (event) {
-        // Remove touch listeners
-        removeListener(window, constants.touchend, onTouchEnd);
-        removeListener(window, constants.touchmove, onTouchMove);
+  var touchEvents = {};
 
-        if (!moved) {
-          // If not moved - callback & prevent mouse events
-          touched = true;
-          // Reset touched flag after 500 millis
-          touchedTimeout = setTimeout(function () {
-            touched = false;
-          }, 500);
+  var FastClickWrapper = React.createClass({
+    noTouchHappened: function () {
+      return !touchEvents.touched || new Date().getDate() > touchEvents.lastTouchDate + TOUCH_DELAY;
+    },
+
+    invalidateIfMoreThanOneTouch: function (event) {
+      touchEvents.invalid = event.touches && event.touches.length > 1 || touchEvents.invalid;
+    },
+
+    onMouseEvent: function (callback, event) {
+      console.log('mouse event wrapper', event.type);
+
+      // Prevent original click if we touched recently
+      if (typeof callback === 'function' && this.noTouchHappened()) {
+        callback(event);
+      }
+      if (event.type === 'click') {
+        touchEvents.invalid = false;
+        touchEvents.touched = false;
+      }
+    },
+
+    onTouchStart: function (event) {
+      console.log('onTouchStart wrapper');
+
+      touchEvents.touched = true;
+      touchEvents.lastTouchDate = new Date().getTime();
+      touchEvents.downPos = {
+        clientX: event.touches[0].clientX,
+        clientY: event.touches[0].clientY
+      };
+      touchEvents.lastPos = {
+        clientX: event.touches[0].clientX,
+        clientY: event.touches[0].clientY
+      };
+      touchEvents.invalid = false;
+      this.invalidateIfMoreThanOneTouch(event);
+
+      if (typeof this.props.props.onTouchStart === 'function') {
+        this.props.props.onTouchStart(event);
+      }
+
+      this.addListeners();
+    },
+
+    onTouchMoveWindow: function (event) {
+      console.log('onTouchMove wrapper');
+
+      touchEvents.touched = true;
+      touchEvents.lastTouchDate = new Date().getTime();
+      touchEvents.lastPos = {
+        clientX: event.touches[0].clientX,
+        clientY: event.touches[0].clientY
+      };
+      this.invalidateIfMoreThanOneTouch(event);
+    },
+
+    onTouchEndWindow: function (event) {
+      console.log('onTouchEnd wrapper');
+
+      touchEvents.touched = true;
+      touchEvents.lastTouchDate = new Date().getTime();
+      this.invalidateIfMoreThanOneTouch(event);
+
+      this.removeListeners();
+    },
+
+    onTouchEnd: function (callback, event) {
+      console.log('onTouchEnd wrapper');
+
+      touchEvents.touched = true;
+      touchEvents.lastTouchDate = new Date().getTime();
+      this.invalidateIfMoreThanOneTouch(event);
+
+      if (!touchEvents.invalid &&
+        Math.abs(touchEvents.downPos.clientX - touchEvents.lastPos.clientX) <= MOVE_THRESHOLD &&
+        Math.abs(touchEvents.downPos.clientY - touchEvents.lastPos.clientY) <= MOVE_THRESHOLD) {
+        if (typeof callback === 'function') {
           callback(event);
         }
-      };
 
-      var onTouchMove = function (event) {
-        var touch = event.touches[0];
-        // Check if touch has moved
-        if (Math.abs(downPos.clientX - touch.clientX) >= constants.moveThreshold ||
-          Math.abs(downPos.clientY - touch.clientY) >= constants.moveThreshold) {
-          moved = true;
+        var box = event.target.getBoundingClientRect();
+        if (touchEvents.lastPos.clientX <= box.right &&
+          touchEvents.lastPos.clientX >= box.left &&
+          touchEvents.lastPos.clientY <= box.bottom &&
+          touchEvents.lastPos.clientY >= box.top) {
+          this.props.props.onClick(event);
         }
-      };
+      }
 
-      var onTouchStart = function (event) {
-        clearTimeout(touchedTimeout);
-        var touch = event.touches[0];
-        // Store initial touch position
-        downPos = {
-          clientX: touch.clientX,
-          clientY: touch.clientY
-        };
-        // Reset moved flag
-        moved = false;
+      this.removeListeners();
+    },
 
-        // Add touch listeners
-        addListener(window, constants.touchend, onTouchEnd);
-        addListener(window, constants.touchmove, onTouchMove);
-      };
+    onCancel: function (event) {
+      console.log('Cancel');
 
-      // Wrap click callback
-      var onClick = function (event) {
-        // Do not call if touch has fired or mouse moved
-        if (!touched && !moved) {
-          callback(event);
-        }
-      };
+      touchEvents.touched = true;
+      touchEvents.lastTouchDate = new Date().getTime();
 
-      // Get original click listener remove function
-      var originalListener = listen(target, eventType, onClick);
+      this.removeListeners();
+    },
 
-      addListener(target, constants.touchstart, onTouchStart);
+    addListeners: function () {
+      addListener(window, 'touchmove', this.onTouchMoveWindow);
+      addListener(window, 'touchend', this.onTouchEndWindow);
+      addListener(window, 'touchcancel', this.onCancel);
+      addListener(window, 'contextmenu', this.onCancel);
+    },
 
-      // Return remove listener functions
-      return {
-        remove: function () {
-          if (originalListener && typeof originalListener.remove === 'function') {
-            originalListener.remove();
-          }
-          removeListener(target, constants.touchstart, onTouchStart);
-        }
-      };
-    } else {
-      return listen(target, eventType, callback);
+    removeListeners: function () {
+      removeListener(window, 'touchmove', this.onTouchMoveWindow);
+      removeListener(window, 'touchend', this.onTouchEndWindow);
+      removeListener(window, 'touchcancel', this.onCancel);
+      removeListener(window, 'contextmenu', this.onCancel);
+    },
+
+    componentWillUnmount: function () {
+      this.removeListeners();
+    },
+
+    render: function () {
+      var props = this.props.props;
+      var newProps = {};
+
+      // Loop over props
+      for (var key in props) {
+        // Copy most props to newProps
+        newProps[key] = props[key];
+      }
+
+      // Apply our wrapped mouse and touch handlers
+      newProps.onClick = this.onMouseEvent.bind(this, props.onClick);
+      newProps.onMouseDown = this.onMouseEvent.bind(this, props.onMouseDown);
+      newProps.onMouseMove = this.onMouseEvent.bind(this, props.onMouseMove);
+      newProps.onMouseUp = this.onMouseEvent.bind(this, props.onMouseUp);
+      newProps.onTouchStart = this.onTouchStart;
+      newProps.onTouchEnd = this.onTouchEnd.bind(this, props.onTouchEnd);
+
+      // Apply original type, newProps and original children to original createElement function
+      return originalCreateElement.apply(
+        null,
+        [this.props.type, newProps].concat(this.props.children)
+      );
     }
+  });
+
+  React.createElement = function () {
+    // Convert arguments to array
+    var args = Array.prototype.slice.call(arguments);
+
+    var type = args[0];
+    var props = args[1];
+
+    // Check if basic element & has onClick prop
+    if (type && typeof type === 'string' &&
+      props && typeof props.onClick === 'function') {
+      // Push type and props into props
+      args[1] = {
+        type: type,
+        props: props
+      }
+      // Replace type with FastClick
+      args[0] = FastClickWrapper;
+    }
+
+    // Apply args to original createElement function
+    return originalCreateElement.apply(null, args);
   };
+
 
 })();

@@ -150,4 +150,10 @@
     return originalCreateElement.apply(null, args);
   };
 
+  if (typeof React.DOM === 'object') {
+    for (var key in React.DOM) {
+      React.DOM[key] = React.createElement.bind(null, key);
+    }
+  }
+
 })();

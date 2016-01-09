@@ -25,12 +25,15 @@
   var handleType = {
     input: function (event) {
       focusOrCheck(event.currentTarget);
+      event.preventDefault();
     },
     textarea: function (event) {
       focusOrCheck(event.currentTarget);
+      event.preventDefault();
     },
     select: function (event) {
       focusOrCheck(event.currentTarget);
+      event.stopPropagation();
     },
     label: function (event) {
       var input;
@@ -46,6 +49,7 @@
       if (input) {
         focusOrCheck(input);
       }
+      event.preventDefault();
     }
   };
 
@@ -131,7 +135,6 @@
 
         if (!event.defaultPrevented && handleType[type]) {
           handleType[type](event);
-          event.preventDefault();
         }
       }
     }

@@ -179,7 +179,9 @@
     var props = args[1];
 
     // Check if basic element & has onClick prop
-    if (type && typeof type === 'string') {
+    if (type && typeof type === 'string' && (
+      (props && typeof props.onClick === 'function') || handleType[type]
+    )) {
       // Add our own events to props
       args[1] = propsWithFastclickEvents(type, props || {});
     }

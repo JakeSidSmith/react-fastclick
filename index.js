@@ -60,8 +60,7 @@
     };
     invalidateIfMoreThanOneTouch(event);
 
-    if (!touchEvents.invalid &&
-      Math.abs(touchEvents.downPos.clientX - touchEvents.lastPos.clientX) > MOVE_THRESHOLD ||
+    if (Math.abs(touchEvents.downPos.clientX - touchEvents.lastPos.clientX) > MOVE_THRESHOLD ||
       Math.abs(touchEvents.downPos.clientY - touchEvents.lastPos.clientY) > MOVE_THRESHOLD) {
       touchEvents.moved = true;
     }

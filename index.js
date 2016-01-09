@@ -110,7 +110,7 @@
     newProps.onTouchMove = onTouchMove.bind(null, props.onTouchMove);
     newProps.onTouchEnd = onTouchEnd.bind(null, props.onTouchEnd, props.onClick);
 
-    if (Object.freeze) {
+    if (typeof Object.freeze === 'function') {
       Object.freeze(newProps);
     }
 

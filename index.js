@@ -75,14 +75,13 @@
     touchEvents.lastTouchDate = new Date().getTime();
     invalidateIfMoreThanOneTouch(event);
 
-    if (!touchEvents.invalid && !touchEvents.moved &&
-      Math.abs(touchEvents.downPos.clientX - touchEvents.lastPos.clientX) <= MOVE_THRESHOLD &&
-      Math.abs(touchEvents.downPos.clientY - touchEvents.lastPos.clientY) <= MOVE_THRESHOLD) {
-      if (typeof callback === 'function') {
-        callback(event);
-      }
+    if (typeof callback === 'function') {
+      callback(event);
+    }
 
+    if (!touchEvents.invalid && !touchEvents.moved) {
       var box = event.target.getBoundingClientRect();
+
       if (touchEvents.lastPos.clientX <= box.right &&
         touchEvents.lastPos.clientX >= box.left &&
         touchEvents.lastPos.clientY <= box.bottom &&
@@ -97,7 +96,7 @@
 
     // Loop over props
     for (var key in props) {
-      // Copy most props to newProps
+      // Copy props to newProps
       newProps[key] = props[key];
     }
 

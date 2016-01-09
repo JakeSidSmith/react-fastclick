@@ -26,6 +26,12 @@
     input: function (event) {
       focusOrCheck(event.currentTarget);
     },
+    textarea: function (event) {
+      focusOrCheck(event.currentTarget);
+    },
+    select: function (event) {
+      focusOrCheck(event.currentTarget);
+    },
     label: function (event) {
       var input;
 
@@ -34,7 +40,7 @@
       if (forTarget) {
         input = document.getElementById(forTarget);
       } else {
-        input = event.currentTarget.getElementsByTagName('input')[0];
+        input = event.currentTarget.querySelectorAll('input, textarea, select')[0];
       }
 
       if (input) {

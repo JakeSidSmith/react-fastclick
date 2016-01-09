@@ -28,6 +28,7 @@
     if (event.type === 'click') {
       touchEvents.invalid = false;
       touchEvents.touched = false;
+      touchEvents.moved = false;
     }
   };
 

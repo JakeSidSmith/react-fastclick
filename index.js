@@ -12,6 +12,37 @@
 
   var touchEvents = {};
 
+  var focusOrCheck = function (target) {
+    target.focus();
+
+    if (target.type === 'checkbox') {
+      target.checked = !target.checked;
+    } else if (target.type === 'radio') {
+      target.checked = true;
+    }
+  };
+
+  var handleType = {
+    input: function (event) {
+      focusOrCheck(event.currentTarget);
+    },
+    label: function (event) {
+      var input;
+
+      var forTarget = event.currentTarget.getAttribute('for');
+
+      if (forTarget) {
+        input = document.getElementById(forTarget);
+      } else {
+        input = event.currentTarget.getElementsByTagName('input')[0];
+      }
+
+      if (input) {
+        focusOrCheck(input);
+      }
+    }
+  };
+
   var noTouchHappened = function () {
     return !touchEvents.touched || new Date().getDate() > touchEvents.lastTouchDate + TOUCH_DELAY;
   };
@@ -71,7 +102,7 @@
     }
   };
 
-  var onTouchEnd = function (callback, onClick, event) {
+  var onTouchEnd = function (callback, onClick, type, event) {
     touchEvents.touched = true;
     touchEvents.lastTouchDate = new Date().getTime();
     invalidateIfMoreThanOneTouch(event);
@@ -81,18 +112,26 @@
     }
 
     if (!touchEvents.invalid && !touchEvents.moved) {
-      var box = event.target.getBoundingClientRect();
+      var box = event.currentTarget.getBoundingClientRect();
 
       if (touchEvents.lastPos.clientX <= box.right &&
         touchEvents.lastPos.clientX >= box.left &&
         touchEvents.lastPos.clientY <= box.bottom &&
         touchEvents.lastPos.clientY >= box.top) {
-        onClick(event);
+
+        if (typeof onClick === 'function') {
+          onClick(event);
+        }
+
+        if (!event.defaultPrevented && handleType[type]) {
+          handleType[type](event);
+          event.preventDefault();
+        }
       }
     }
   };
 
-  var propsWithFastclickEvents = function (props) {
+  var propsWithFastclickEvents = function (type, props) {
     var newProps = {};
 
     // Loop over props
@@ -108,7 +147,7 @@
     newProps.onMouseUp = onMouseEvent.bind(null, props.onMouseUp);
     newProps.onTouchStart = onTouchStart.bind(null, props.onTouchStart);
     newProps.onTouchMove = onTouchMove.bind(null, props.onTouchMove);
-    newProps.onTouchEnd = onTouchEnd.bind(null, props.onTouchEnd, props.onClick);
+    newProps.onTouchEnd = onTouchEnd.bind(null, props.onTouchEnd, props.onClick, type);
 
     if (typeof Object.freeze === 'function') {
       Object.freeze(newProps);
@@ -125,10 +164,9 @@
     var props = args[1];
 
     // Check if basic element & has onClick prop
-    if (type && typeof type === 'string' &&
-      props && typeof props.onClick === 'function') {
+    if (type && typeof type === 'string') {
       // Add our own events to props
-      args[1] = propsWithFastclickEvents(props);
+      args[1] = propsWithFastclickEvents(type, props || {});
     }
 
     // Apply args to original createElement function

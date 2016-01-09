@@ -32,6 +32,7 @@
   };
 
   var onTouchStart = function (callback, event) {
+    touchEvents.moved = false;
     touchEvents.touched = true;
     touchEvents.lastTouchDate = new Date().getTime();
     touchEvents.downPos = {
@@ -44,10 +45,6 @@
     };
     touchEvents.invalid = false;
     invalidateIfMoreThanOneTouch(event);
-
-    if (!touchEvents.invalid) {
-      touchEvents.moved = false;
-    }
 
     if (typeof callback === 'function') {
       callback(event);

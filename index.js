@@ -12,7 +12,7 @@
 
   var touchEvents = {};
 
-  var focusOrCheck = function (event, target) {
+  var focusAndCheck = function (event, target) {
     var myTarget = target || event.currentTarget;
     myTarget.focus();
 
@@ -30,15 +30,15 @@
 
   var handleType = {
     input: function (event) {
-      focusOrCheck(event);
+      focusAndCheck(event);
       event.stopPropagation();
     },
     textarea: function (event) {
-      focusOrCheck(event);
+      focusAndCheck(event);
       event.stopPropagation();
     },
     select: function (event) {
-      focusOrCheck(event);
+      focusAndCheck(event);
       event.stopPropagation();
     },
     label: function (event) {
@@ -53,7 +53,7 @@
       }
 
       if (input) {
-        focusOrCheck(event, input);
+        focusAndCheck(event, input);
       }
       event.preventDefault();
     }

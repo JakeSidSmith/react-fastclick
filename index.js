@@ -21,7 +21,7 @@
   };
 
   var onMouseEvent = function (callback, event) {
-    // Prevent original click if we touched recently
+    // Prevent any mouse events if we touched recently
     if (typeof callback === 'function' && noTouchHappened()) {
       callback(event);
     }

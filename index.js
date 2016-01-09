@@ -96,11 +96,6 @@
     }
   };
 
-  var onCancel = function () {
-    touchEvents.touched = true;
-    touchEvents.lastTouchDate = new Date().getTime();
-  };
-
   var propsWithFastclickEvents = function (props) {
     var newProps = {};
 

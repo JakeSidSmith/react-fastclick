@@ -12,27 +12,33 @@
 
   var touchEvents = {};
 
-  var focusOrCheck = function (target) {
-    target.focus();
+  var focusOrCheck = function (event, target) {
+    var myTarget = target || event.currentTarget;
+    myTarget.focus();
 
-    if (target.type === 'checkbox') {
-      target.checked = !target.checked;
-    } else if (target.type === 'radio') {
-      target.checked = true;
+    switch (myTarget.type) {
+      case 'checkbox':
+        myTarget.checked = !myTarget.checked;
+        event.preventDefault();
+        break;
+      case 'radio':
+        myTarget.checked = true;
+        event.preventDefault();
+        break;
     }
   };
 
   var handleType = {
     input: function (event) {
-      focusOrCheck(event.currentTarget);
-      event.preventDefault();
+      focusOrCheck(event);
+      event.stopPropagation();
     },
     textarea: function (event) {
-      focusOrCheck(event.currentTarget);
-      event.preventDefault();
+      focusOrCheck(event);
+      event.stopPropagation();
     },
     select: function (event) {
-      focusOrCheck(event.currentTarget);
+      focusOrCheck(event);
       event.stopPropagation();
     },
     label: function (event) {
@@ -47,7 +53,7 @@
       }
 
       if (input) {
-        focusOrCheck(input);
+        focusOrCheck(event, input);
       }
       event.preventDefault();
     }

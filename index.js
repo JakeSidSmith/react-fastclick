@@ -21,8 +21,6 @@
   };
 
   var onMouseEvent = function (callback, event) {
-    console.log('mouse event wrapper', event.type);
-
     // Prevent original click if we touched recently
     if (typeof callback === 'function' && noTouchHappened()) {
       callback(event);
@@ -34,8 +32,6 @@
   };
 
   var onTouchStart = function (callback, event) {
-    console.log('onTouchStart wrapper');
-
     touchEvents.touched = true;
     touchEvents.lastTouchDate = new Date().getTime();
     touchEvents.downPos = {
@@ -59,8 +55,6 @@
   };
 
   var onTouchMove = function (callback, event) {
-    console.log('onTouchMove wrapper');
-
     touchEvents.touched = true;
     touchEvents.lastTouchDate = new Date().getTime();
     touchEvents.lastPos = {
@@ -81,8 +75,6 @@
   };
 
   var onTouchEnd = function (callback, onClick, event) {
-    console.log('onTouchEnd wrapper');
-
     touchEvents.touched = true;
     touchEvents.lastTouchDate = new Date().getTime();
     invalidateIfMoreThanOneTouch(event);
@@ -105,8 +97,6 @@
   };
 
   var onCancel = function () {
-    console.log('Cancel');
-
     touchEvents.touched = true;
     touchEvents.lastTouchDate = new Date().getTime();
   };

@@ -12,6 +12,14 @@
 
   var touchEvents = {};
 
+  var fakeClickEvent = function (event) {
+    event.fastclick = true;
+    event.type = 'click';
+    event.button = 0;
+
+    return event;
+  };
+
   var focusAndCheck = function (event, target) {
     var myTarget = target || event.currentTarget;
     myTarget.focus();
@@ -136,7 +144,7 @@
         touchEvents.lastPos.clientY >= box.top) {
 
         if (typeof onClick === 'function') {
-          onClick(event);
+          onClick(fakeClickEvent(event));
         }
 
         if (!event.defaultPrevented && handleType[type]) {

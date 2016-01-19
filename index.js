@@ -155,10 +155,10 @@
     if (!touchEvents.invalid && !touchEvents.moved) {
       var box = event.currentTarget.getBoundingClientRect();
 
-      if (touchEvents.lastPos.clientX <= box.right &&
-        touchEvents.lastPos.clientX >= box.left &&
-        touchEvents.lastPos.clientY <= box.bottom &&
-        touchEvents.lastPos.clientY >= box.top) {
+      if (touchEvents.lastPos.clientX - touchEvents.lastPos.radiusX <= box.right &&
+        touchEvents.lastPos.clientX + touchEvents.lastPos.radiusX >= box.left &&
+        touchEvents.lastPos.clientY - touchEvents.lastPos.radiusY <= box.bottom &&
+        touchEvents.lastPos.clientY + touchEvents.lastPos.radiusY >= box.top) {
 
         if (typeof onClick === 'function') {
           copyTouchKeys(touchEvents.lastPos, event);

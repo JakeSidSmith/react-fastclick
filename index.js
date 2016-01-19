@@ -162,7 +162,7 @@
 
         if (typeof onClick === 'function') {
           copyTouchKeys(touchEvents.lastPos, event);
-          fakeClickEvent(event)
+          fakeClickEvent(event);
           onClick(event);
         }
 

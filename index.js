@@ -10,14 +10,20 @@
   var MOVE_THRESHOLD = 8;
   var TOUCH_DELAY = 1000;
 
-  var touchEvents = {};
+  var touchKeysToStore = [
+    'clientX',
+    'clientY',
+    'pageX',
+    'pageY',
+    'screenX',
+    'screenY',
+    'radiusX',
+    'radiusY'
+  ];
 
-  var fakeClickEvent = function (event) {
-    event.fastclick = true;
-    event.type = 'click';
-    event.button = 0;
-
-    return event;
+  var touchEvents = {
+    downPos: {},
+    lastPos: {}
   };
 
   var focusAndCheck = function (event, target) {
@@ -67,6 +73,21 @@
     }
   };
 
+  var fakeClickEvent = function (event) {
+    event.fastclick = true;
+    event.type = 'click';
+    event.button = 0;
+  };
+
+  var copyTouchKeys = function (touch, target) {
+    if (touch) {
+      for (var i = 0; i < touchKeysToStore.length; i += 1) {
+        var key = touchKeysToStore[i];
+        target[key] = touch[key];
+      }
+    }
+  };
+
   var noTouchHappened = function () {
     return !touchEvents.touched || new Date().getDate() > touchEvents.lastTouchDate + TOUCH_DELAY;
   };
@@ -88,18 +109,14 @@
   };
 
   var onTouchStart = function (callback, event) {
+    touchEvents.invalid = false;
     touchEvents.moved = false;
     touchEvents.touched = true;
     touchEvents.lastTouchDate = new Date().getTime();
-    touchEvents.downPos = {
-      clientX: event.touches[0].clientX,
-      clientY: event.touches[0].clientY
-    };
-    touchEvents.lastPos = {
-      clientX: event.touches[0].clientX,
-      clientY: event.touches[0].clientY
-    };
-    touchEvents.invalid = false;
+
+    copyTouchKeys(event.touches[0], touchEvents.downPos);
+    copyTouchKeys(event.touches[0], touchEvents.lastPos);
+
     invalidateIfMoreThanOneTouch(event);
 
     if (typeof callback === 'function') {
@@ -110,10 +127,9 @@
   var onTouchMove = function (callback, event) {
     touchEvents.touched = true;
     touchEvents.lastTouchDate = new Date().getTime();
-    touchEvents.lastPos = {
-      clientX: event.touches[0].clientX,
-      clientY: event.touches[0].clientY
-    };
+
+    copyTouchKeys(event.touches[0], touchEvents.lastPos);
+
     invalidateIfMoreThanOneTouch(event);
 
     if (Math.abs(touchEvents.downPos.clientX - touchEvents.lastPos.clientX) > MOVE_THRESHOLD ||
@@ -129,6 +145,7 @@
   var onTouchEnd = function (callback, onClick, type, event) {
     touchEvents.touched = true;
     touchEvents.lastTouchDate = new Date().getTime();
+
     invalidateIfMoreThanOneTouch(event);
 
     if (typeof callback === 'function') {
@@ -144,7 +161,9 @@
         touchEvents.lastPos.clientY >= box.top) {
 
         if (typeof onClick === 'function') {
-          onClick(fakeClickEvent(event));
+          copyTouchKeys(touchEvents.lastPos, event);
+          fakeClickEvent(event)
+          onClick(event);
         }
 
         if (!event.defaultPrevented && handleType[type]) {

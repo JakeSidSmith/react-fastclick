@@ -19,28 +19,16 @@ Include react-fastclick in your main javascript file before any of your componen
 
 Now any calls to onClick will have fast touch events added automatically - no need to write any additional listeners.
 
-Example:
+**ES6**
 
 ```javascript
-'use strict';
+import 'react-fastclick';
+```
 
+**ES5**
+
+```javascript
 require('react-fastclick');
-var React = require('react');
-
-var App = React.createClass({
-  logEventType: function (event) {
-    console.log(event.type);
-  },
-  render: function() {
-    return (
-      <p onClick={this.logEventType}>
-        Hello, world!
-      </p>
-    );
-  }
-});
-
-React.render(<App />, document.body);
 ```
 
 ## Notes

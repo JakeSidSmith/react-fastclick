@@ -3,110 +3,224 @@
 (function () {
 
   var React = require('react');
-  var EventListener = require('react/lib/EventListener');
 
-  React.initializeTouchEvents(true);
+  var originalCreateElement = React.createElement;
 
-  // Save original listen method
-  var listen = EventListener.listen;
+  // Moved if Math.abs(downX - upX) > MOVE_THRESHOLD;
+  var MOVE_THRESHOLD = 8;
+  var TOUCH_DELAY = 1000;
 
-  var constants = {
-    touchstart: 'touchstart',
-    touchend: 'touchend',
-    touchmove: 'touchmove',
-    moveThreshold: 20
+  var touchKeysToStore = [
+    'clientX',
+    'clientY',
+    'pageX',
+    'pageY',
+    'screenX',
+    'screenY',
+    'radiusX',
+    'radiusY'
+  ];
+
+  var touchEvents = {
+    downPos: {},
+    lastPos: {}
   };
 
-  var addListener = function (target, eventType, callback) {
-    if (target.addEventListener) {
-      target.addEventListener(eventType, callback, false);
-    } else if (target.attachEvent) {
-      target.attachEvent('on' + eventType, callback, false);
+  var focusAndCheck = function (event, target) {
+    var myTarget = target || event.currentTarget;
+    myTarget.focus();
+
+    switch (myTarget.type) {
+      case 'checkbox':
+        myTarget.checked = !myTarget.checked;
+        event.preventDefault();
+        break;
+      case 'radio':
+        myTarget.checked = true;
+        event.preventDefault();
+        break;
     }
   };
 
-  var removeListener = function (target, eventType, callback) {
-    if (target.removeEventListener) {
-      target.removeEventListener(eventType, callback, false);
-    } else if (target.detachEvent) {
-      target.detachEvent('on' + eventType, callback, false);
+  var handleType = {
+    input: function (event) {
+      focusAndCheck(event);
+      event.stopPropagation();
+    },
+    textarea: function (event) {
+      focusAndCheck(event);
+      event.stopPropagation();
+    },
+    select: function (event) {
+      focusAndCheck(event);
+      event.stopPropagation();
+    },
+    label: function (event) {
+      var input;
+
+      var forTarget = event.currentTarget.getAttribute('for');
+
+      if (forTarget) {
+        input = document.getElementById(forTarget);
+      } else {
+        input = event.currentTarget.querySelectorAll('input, textarea, select')[0];
+      }
+
+      if (input) {
+        focusAndCheck(event, input);
+      }
+      event.preventDefault();
     }
   };
 
-  // Create new listen method
-  EventListener.listen = function (target, eventType, callback) {
-    if (eventType === 'click') {
-      var downPos;
-      var touchedTimeout;
-      var moved = false;
-      var touched = false;
+  var fakeClickEvent = function (event) {
+    event.fastclick = true;
+    event.type = 'click';
+    event.button = 0;
+  };
 
-      var onTouchEnd = function (event) {
-        // Remove touch listeners
-        removeListener(window, constants.touchend, onTouchEnd);
-        removeListener(window, constants.touchmove, onTouchMove);
-
-        if (!moved) {
-          // If not moved - callback & prevent mouse events
-          touched = true;
-          // Reset touched flag after 500 millis
-          touchedTimeout = setTimeout(function () {
-            touched = false;
-          }, 500);
-          callback(event);
-        }
-      };
-
-      var onTouchMove = function (event) {
-        var touch = event.touches[0];
-        // Check if touch has moved
-        if (Math.abs(downPos.clientX - touch.clientX) >= constants.moveThreshold ||
-          Math.abs(downPos.clientY - touch.clientY) >= constants.moveThreshold) {
-          moved = true;
-        }
-      };
-
-      var onTouchStart = function (event) {
-        clearTimeout(touchedTimeout);
-        var touch = event.touches[0];
-        // Store initial touch position
-        downPos = {
-          clientX: touch.clientX,
-          clientY: touch.clientY
-        };
-        // Reset moved flag
-        moved = false;
-
-        // Add touch listeners
-        addListener(window, constants.touchend, onTouchEnd);
-        addListener(window, constants.touchmove, onTouchMove);
-      };
-
-      // Wrap click callback
-      var onClick = function (event) {
-        // Do not call if touch has fired or mouse moved
-        if (!touched && !moved) {
-          callback(event);
-        }
-      };
-
-      // Get original click listener remove function
-      var originalListener = listen(target, eventType, onClick);
-
-      addListener(target, constants.touchstart, onTouchStart);
-
-      // Return remove listener functions
-      return {
-        remove: function () {
-          if (originalListener && typeof originalListener.remove === 'function') {
-            originalListener.remove();
-          }
-          removeListener(target, constants.touchstart, onTouchStart);
-        }
-      };
-    } else {
-      return listen(target, eventType, callback);
+  var copyTouchKeys = function (touch, target) {
+    if (touch) {
+      for (var i = 0; i < touchKeysToStore.length; i += 1) {
+        var key = touchKeysToStore[i];
+        target[key] = touch[key];
+      }
     }
   };
+
+  var noTouchHappened = function () {
+    return !touchEvents.touched || new Date().getDate() > touchEvents.lastTouchDate + TOUCH_DELAY;
+  };
+
+  var invalidateIfMoreThanOneTouch = function (event) {
+    touchEvents.invalid = event.touches && event.touches.length > 1 || touchEvents.invalid;
+  };
+
+  var onMouseEvent = function (callback, event) {
+    // Prevent any mouse events if we touched recently
+    if (typeof callback === 'function' && noTouchHappened()) {
+      callback(event);
+    }
+    if (event.type === 'click') {
+      touchEvents.invalid = false;
+      touchEvents.touched = false;
+      touchEvents.moved = false;
+    }
+  };
+
+  var onTouchStart = function (callback, event) {
+    touchEvents.invalid = false;
+    touchEvents.moved = false;
+    touchEvents.touched = true;
+    touchEvents.lastTouchDate = new Date().getTime();
+
+    copyTouchKeys(event.touches[0], touchEvents.downPos);
+    copyTouchKeys(event.touches[0], touchEvents.lastPos);
+
+    invalidateIfMoreThanOneTouch(event);
+
+    if (typeof callback === 'function') {
+      callback(event);
+    }
+  };
+
+  var onTouchMove = function (callback, event) {
+    touchEvents.touched = true;
+    touchEvents.lastTouchDate = new Date().getTime();
+
+    copyTouchKeys(event.touches[0], touchEvents.lastPos);
+
+    invalidateIfMoreThanOneTouch(event);
+
+    if (Math.abs(touchEvents.downPos.clientX - touchEvents.lastPos.clientX) > MOVE_THRESHOLD ||
+      Math.abs(touchEvents.downPos.clientY - touchEvents.lastPos.clientY) > MOVE_THRESHOLD) {
+      touchEvents.moved = true;
+    }
+
+    if (typeof callback === 'function') {
+      callback(event);
+    }
+  };
+
+  var onTouchEnd = function (callback, onClick, type, event) {
+    touchEvents.touched = true;
+    touchEvents.lastTouchDate = new Date().getTime();
+
+    invalidateIfMoreThanOneTouch(event);
+
+    if (typeof callback === 'function') {
+      callback(event);
+    }
+
+    if (!touchEvents.invalid && !touchEvents.moved) {
+      var box = event.currentTarget.getBoundingClientRect();
+
+      if (touchEvents.lastPos.clientX - touchEvents.lastPos.radiusX <= box.right &&
+        touchEvents.lastPos.clientX + touchEvents.lastPos.radiusX >= box.left &&
+        touchEvents.lastPos.clientY - touchEvents.lastPos.radiusY <= box.bottom &&
+        touchEvents.lastPos.clientY + touchEvents.lastPos.radiusY >= box.top) {
+
+        if (typeof onClick === 'function') {
+          copyTouchKeys(touchEvents.lastPos, event);
+          fakeClickEvent(event);
+          onClick(event);
+        }
+
+        if (!event.defaultPrevented && handleType[type]) {
+          handleType[type](event);
+        }
+      }
+    }
+  };
+
+  var propsWithFastclickEvents = function (type, props) {
+    var newProps = {};
+
+    // Loop over props
+    for (var key in props) {
+      // Copy props to newProps
+      newProps[key] = props[key];
+    }
+
+    // Apply our wrapped mouse and touch handlers
+    newProps.onClick = onMouseEvent.bind(null, props.onClick);
+    newProps.onMouseDown = onMouseEvent.bind(null, props.onMouseDown);
+    newProps.onMouseMove = onMouseEvent.bind(null, props.onMouseMove);
+    newProps.onMouseUp = onMouseEvent.bind(null, props.onMouseUp);
+    newProps.onTouchStart = onTouchStart.bind(null, props.onTouchStart);
+    newProps.onTouchMove = onTouchMove.bind(null, props.onTouchMove);
+    newProps.onTouchEnd = onTouchEnd.bind(null, props.onTouchEnd, props.onClick, type);
+
+    if (typeof Object.freeze === 'function') {
+      Object.freeze(newProps);
+    }
+
+    return newProps;
+  };
+
+  React.createElement = function () {
+    // Convert arguments to array
+    var args = Array.prototype.slice.call(arguments);
+
+    var type = args[0];
+    var props = args[1];
+
+    // Check if basic element & has onClick prop
+    if (type && typeof type === 'string' && (
+      (props && typeof props.onClick === 'function') || handleType[type]
+    )) {
+      // Add our own events to props
+      args[1] = propsWithFastclickEvents(type, props || {});
+    }
+
+    // Apply args to original createElement function
+    return originalCreateElement.apply(null, args);
+  };
+
+  if (typeof React.DOM === 'object') {
+    for (var key in React.DOM) {
+      React.DOM[key] = React.createElement.bind(null, key);
+    }
+  }
 
 })();

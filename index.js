@@ -3,6 +3,7 @@
 (function () {
 
   var React = require('react');
+  var ReactTestUtils = require('react-addons-test-utils');
 
   var originalCreateElement = React.createElement;
 
@@ -33,10 +34,12 @@
     switch (myTarget.type) {
       case 'checkbox':
         myTarget.checked = !myTarget.checked;
+        ReactTestUtils.Simulate.change(myTarget);
         event.preventDefault();
         break;
       case 'radio':
         myTarget.checked = true;
+        ReactTestUtils.Simulate.change(myTarget);
         event.preventDefault();
         break;
     }

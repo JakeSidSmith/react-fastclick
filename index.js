@@ -26,8 +26,22 @@
     lastPos: {}
   };
 
+  var isDisabled = function (element) {
+    if (!element) {
+      return false;
+    }
+    var disabled = element.getAttribute('disabled');
+
+    return disabled !== false && disabled !== null;
+  };
+
   var focusAndCheck = function (event, target) {
     var myTarget = target || event.currentTarget;
+
+    if (isDisabled(myTarget)) {
+      return;
+    }
+
     myTarget.focus();
 
     switch (myTarget.type) {
@@ -160,14 +174,16 @@
         touchEvents.lastPos.clientY - (touchEvents.lastPos.radiusY || 0) <= box.bottom &&
         touchEvents.lastPos.clientY + (touchEvents.lastPos.radiusY || 0) >= box.top) {
 
-        if (typeof onClick === 'function') {
-          copyTouchKeys(touchEvents.lastPos, event);
-          fakeClickEvent(event);
-          onClick(event);
-        }
+        if (!isDisabled(event.currentTarget)) {
+          if (typeof onClick === 'function') {
+            copyTouchKeys(touchEvents.lastPos, event);
+            fakeClickEvent(event);
+            onClick(event);
+          }
 
-        if (!event.defaultPrevented && handleType[type]) {
-          handleType[type](event);
+          if (!event.defaultPrevented && handleType[type]) {
+            handleType[type](event);
+          }
         }
       }
     }

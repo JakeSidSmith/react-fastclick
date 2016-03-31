@@ -72,7 +72,6 @@
       if (input) {
         focus(event, input);
       }
-      event.preventDefault();
     }
   };
 

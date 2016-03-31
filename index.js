@@ -103,7 +103,7 @@
   };
 
   var noTouchHappened = function () {
-    return !touchEvents.touched || new Date().getDate() > touchEvents.lastTouchDate + TOUCH_DELAY;
+    return !touchEvents.touched && new Date().getTime() > touchEvents.lastTouchDate + TOUCH_DELAY;
   };
 
   var invalidateIfMoreThanOneTouch = function (event) {

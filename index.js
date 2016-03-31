@@ -35,7 +35,7 @@
     return disabled !== false && disabled !== null;
   };
 
-  var focusAndCheck = function (event, target) {
+  var focus = function (event, target) {
     var myTarget = target || event.currentTarget;
 
     if (isDisabled(myTarget)) {
@@ -43,30 +43,19 @@
     }
 
     myTarget.focus();
-
-    switch (myTarget.type) {
-      case 'checkbox':
-        myTarget.checked = !myTarget.checked;
-        event.preventDefault();
-        break;
-      case 'radio':
-        myTarget.checked = true;
-        event.preventDefault();
-        break;
-    }
   };
 
   var handleType = {
     input: function (event) {
-      focusAndCheck(event);
+      focus(event);
       event.stopPropagation();
     },
     textarea: function (event) {
-      focusAndCheck(event);
+      focus(event);
       event.stopPropagation();
     },
     select: function (event) {
-      focusAndCheck(event);
+      focus(event);
       event.stopPropagation();
     },
     label: function (event) {
@@ -81,7 +70,7 @@
       }
 
       if (input) {
-        focusAndCheck(event, input);
+        focus(event, input);
       }
       event.preventDefault();
     }

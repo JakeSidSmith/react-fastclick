@@ -2,7 +2,7 @@
   "name": "react-fastclick",
   "version": "2.1.0",
   "description": "Fast Touch Events for React",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "eslint -c node_modules/eslintrc/.eslintrc-es5 index.js"
   },

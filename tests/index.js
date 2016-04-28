@@ -1,8 +1,11 @@
 'use strict';
 
 var expect = require('chai').expect;
-var spy = require('sinon').spy;
+var sinon = require('sinon');
+var spy = sinon.spy;
+var stub = sinon.stub;
 var TestUtils = require('react-addons-test-utils');
+var ReactDOM = require('react-dom');
 
 describe('react-fastclick', function () {
 
@@ -126,6 +129,62 @@ describe('react-fastclick', function () {
           expect(props[key]).to.have.been.calledOnce;
         }
       }
+    });
+
+    function getBoundingClientRect () {
+      return {
+        top: 25,
+        left: 25,
+        right: 75,
+        bottom: 75,
+        width: 50,
+        height: 50
+      };
+    }
+
+    var touches = [
+      {
+        clientX: 50,
+        clientY: 50
+      }
+    ];
+
+    it('should trigger the click handler when a fastclick happens', function () {
+      var props = {
+        style: {
+          position: 'absolute',
+          top: 25,
+          left: 25,
+          width: 50,
+          height: 50
+        },
+        onClick: spy()
+      };
+
+      var instance = TestUtils.renderIntoDocument(fastclickCreateElement('div', props));
+      var node = ReactDOM.findDOMNode(instance);
+
+      var getBoundingClientRectStub = stub(node, 'getBoundingClientRect', getBoundingClientRect);
+
+      TestUtils.Simulate.touchStart(
+        node,
+        {
+          type: 'touchstart',
+          touches: touches
+        }
+      );
+
+      TestUtils.Simulate.touchEnd(
+        node,
+        {
+          type: 'touchend',
+          touches: touches
+        }
+      );
+
+      expect(props.onClick).to.have.been.calledOnce;
+
+      getBoundingClientRectStub.restore();
     });
 
   });

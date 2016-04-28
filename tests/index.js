@@ -8,6 +8,11 @@ describe('react-fastclick', function () {
 
   var originalCreateElement, fastclickCreateElement;
 
+  function handlerStringToSimulatedEventKey (str) {
+    var simulatedEventKey = str.replace(/^on/, '');
+    return simulatedEventKey.charAt(0).toLowerCase() + simulatedEventKey.substring(1);
+  }
+
   var specialTypes = [
     'input',
     'textarea',
@@ -90,10 +95,31 @@ describe('react-fastclick', function () {
       var instance = TestUtils.renderIntoDocument(fastclickCreateElement('div', props));
 
       for (var key in props) {
-        var mouseEvent = key.replace(/^on/, '');
-        mouseEvent = mouseEvent.charAt(0).toLowerCase() + mouseEvent.substring(1);
+        var mouseEvent = handlerStringToSimulatedEventKey(key);
 
         TestUtils.Simulate[mouseEvent](instance);
+
+        expect(props[key]).to.have.been.calledOnce;
+      }
+    });
+
+  });
+
+  describe('touch events', function () {
+
+    it('should trigger standard touch event handlers', function () {
+      var props = {
+        onTouchStart: spy(),
+        onTouchMove: spy(),
+        onTouchEnd: spy()
+      };
+
+      var instance = TestUtils.renderIntoDocument(fastclickCreateElement('div', props));
+
+      for (var key in props) {
+        var touchEvent = handlerStringToSimulatedEventKey(key);
+
+        TestUtils.Simulate[touchEvent](instance);
 
         expect(props[key]).to.have.been.calledOnce;
       }

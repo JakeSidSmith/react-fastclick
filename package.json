@@ -4,7 +4,7 @@
   "description": "Fast Touch Events for React",
   "main": "index.js",
   "scripts": {
-    "test": "jshint index.js && jscs index.js"
+    "test": "eslint -c node_modules/eslintrc/.eslintrc-es5 index.js"
   },
   "repository": {
     "type": "git",
@@ -30,60 +30,6 @@
     "react": ">=0.12.0"
   },
   "devDependencies": {
-    "jscs": "=2.8.0",
-    "jshint": "=2.9.1"
-  },
-  "jshintConfig": {
-    "browserify": true,
-    "unused": true,
-    "undef": true,
-    "globals": {
-      "console": false
-    }
-  },
-  "jscsConfig": {
-    "disallowMultipleVarDecl": "exceptUndefined",
-    "validateQuoteMarks": {
-      "mark": "'",
-      "escape": false
-    },
-    "validateParameterSeparator": ", ",
-    "validateIndentation": 2,
-    "requireSpacesInFunction": {
-      "beforeOpeningRoundBrace": true,
-      "beforeOpeningCurlyBrace": true
-    },
-    "requireSpacesInConditionalExpression": {
-      "afterTest": true,
-      "beforeConsequent": true,
-      "afterConsequent": true,
-      "beforeAlternate": true
-    },
-    "disallowTrailingWhitespace": true,
-    "maximumLineLength": 100,
-    "requireCurlyBraces": [
-      "if",
-      "else",
-      "for",
-      "while",
-      "do",
-      "try",
-      "catch"
-    ],
-    "disallowMixedSpacesAndTabs": true,
-    "requireSpaceBeforeBinaryOperators": true,
-    "safeContextKeyword": [
-      "self"
-    ],
-    "disallowMultipleLineBreaks": true,
-    "disallowMultipleLineStrings": true,
-    "disallowSpaceAfterObjectKeys": true,
-    "disallowNewlineBeforeBlockStatements": true,
-    "disallowTrailingComma": true,
-    "requireCommaBeforeLineBreak": true,
-    "requireSpaceBetweenArguments": true,
-    "requireSpaceBeforeBlockStatements": true,
-    "requireSpaceBeforeObjectValues": true,
-    "requireSpacesInForStatement": true
+    "eslintrc": "git+https://github.com/JakeSidSmith/eslintrc.git#v0.0.0"
   }
 }

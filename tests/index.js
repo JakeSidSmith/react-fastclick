@@ -182,6 +182,13 @@ describe('react-fastclick', function () {
         }
       );
 
+      TestUtils.Simulate.click(
+        node,
+        {
+          type: 'click'
+        }
+      );
+
       expect(props.onClick).to.have.been.calledOnce;
 
       getBoundingClientRectStub.restore();

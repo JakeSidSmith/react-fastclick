@@ -1,11 +1,12 @@
 'use strict';
 
 var expect = require('chai').expect;
-// var spy = require('sinon').spy;
+var spy = require('sinon').spy;
+var TestUtils = require('react-addons-test-utils');
 
 describe('react-fastclick', function () {
 
-  var originalCreateElement, redefinedCreateElement;
+  var originalCreateElement, fastclickCreateElement;
 
   var specialTypes = [
     'input',
@@ -37,15 +38,15 @@ describe('react-fastclick', function () {
     expect(originalCreateElement).to.equal(theSameCreateElement);
 
     require('../lib/index');
-    redefinedCreateElement = require('react').createElement;
+    fastclickCreateElement = require('react').createElement;
 
-    expect(originalCreateElement).not.to.equal(redefinedCreateElement);
+    expect(originalCreateElement).not.to.equal(fastclickCreateElement);
   });
 
   describe('createElement', function () {
 
     it('should create a regular React element', function () {
-      var element = redefinedCreateElement('div');
+      var element = fastclickCreateElement('div');
 
       expect(element).to.exist;
       expect(element.ref).to.be.null;
@@ -58,7 +59,7 @@ describe('react-fastclick', function () {
       var element;
 
       for (var i = 0; i < specialTypes.length; i += 1) {
-        element = redefinedCreateElement(specialTypes[i]);
+        element = fastclickCreateElement(specialTypes[i]);
 
         for (var key in additionalProps) {
           expect(typeof element.props[key]).to.equal('function');
@@ -67,10 +68,34 @@ describe('react-fastclick', function () {
     });
 
     it('should add events if it has an onClick handler', function () {
-      var element = redefinedCreateElement('div', {onClick: function () {}});
+      var element = fastclickCreateElement('div', {onClick: function () {}});
 
       for (var key in additionalProps) {
         expect(typeof element.props[key]).to.equal('function');
+      }
+    });
+
+  });
+
+  describe('mouse events', function () {
+
+    it('should trigger standard mouse event handlers', function () {
+      var props = {
+        onMouseDown: spy(),
+        onMouseMove: spy(),
+        onMouseUp: spy(),
+        onClick: spy()
+      };
+
+      var instance = TestUtils.renderIntoDocument(fastclickCreateElement('div', props));
+
+      for (var key in props) {
+        var mouseEvent = key.replace(/^on/, '');
+        mouseEvent = mouseEvent.charAt(0).toLowerCase() + mouseEvent.substring(1);
+
+        TestUtils.Simulate[mouseEvent](instance);
+
+        expect(props[key]).to.have.been.calledOnce;
       }
     });
 

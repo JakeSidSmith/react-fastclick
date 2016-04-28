@@ -109,6 +109,7 @@ describe('react-fastclick', function () {
 
     it('should trigger standard touch event handlers', function () {
       var props = {
+        onClick: function () {},
         onTouchStart: spy(),
         onTouchMove: spy(),
         onTouchEnd: spy()
@@ -117,11 +118,13 @@ describe('react-fastclick', function () {
       var instance = TestUtils.renderIntoDocument(fastclickCreateElement('div', props));
 
       for (var key in props) {
-        var touchEvent = handlerStringToSimulatedEventKey(key);
+        if (key !== 'onClick') {
+          var touchEvent = handlerStringToSimulatedEventKey(key);
 
-        TestUtils.Simulate[touchEvent](instance);
+          TestUtils.Simulate[touchEvent](instance, {touches: [{}]});
 
-        expect(props[key]).to.have.been.calledOnce;
+          expect(props[key]).to.have.been.calledOnce;
+        }
       }
     });
 

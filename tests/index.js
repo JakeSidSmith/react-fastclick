@@ -182,6 +182,8 @@ describe('react-fastclick', function () {
         }
       );
 
+      expect(props.onClick).to.have.been.calledOnce;
+
       TestUtils.Simulate.click(
         node,
         {

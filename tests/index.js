@@ -151,13 +151,6 @@ describe('react-fastclick', function () {
 
     it('should trigger the click handler when a fastclick happens', function () {
       var props = {
-        style: {
-          position: 'absolute',
-          top: 25,
-          left: 25,
-          width: 50,
-          height: 50
-        },
         onClick: spy()
       };
 

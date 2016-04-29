@@ -11,8 +11,8 @@ describe('react-fastclick', function () {
 
   var originalCreateElement, fastclickCreateElement;
 
-  function handlerStringToSimulatedEventKey (str) {
-    var simulatedEventKey = str.replace(/^on/, '');
+  function handlerKeyToSimulatedEventKey (key) {
+    var simulatedEventKey = key.replace(/^on/, '');
     return simulatedEventKey.charAt(0).toLowerCase() + simulatedEventKey.substring(1);
   }
 
@@ -98,7 +98,7 @@ describe('react-fastclick', function () {
       var instance = TestUtils.renderIntoDocument(fastclickCreateElement('div', props));
 
       for (var key in props) {
-        var mouseEvent = handlerStringToSimulatedEventKey(key);
+        var mouseEvent = handlerKeyToSimulatedEventKey(key);
 
         TestUtils.Simulate[mouseEvent](instance);
 
@@ -122,7 +122,7 @@ describe('react-fastclick', function () {
 
       for (var key in props) {
         if (key !== 'onClick') {
-          var touchEvent = handlerStringToSimulatedEventKey(key);
+          var touchEvent = handlerKeyToSimulatedEventKey(key);
 
           TestUtils.Simulate[touchEvent](instance, {touches: [{}]});
 

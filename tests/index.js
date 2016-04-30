@@ -331,41 +331,49 @@ describe('react-fastclick', function () {
 
   describe('special elements', function () {
 
-    it('should focus an input when a fastclick is triggered', function () {
-      var instance = TestUtils.renderIntoDocument(fastclickCreateElement('input'));
-      var node = ReactDOM.findDOMNode(instance);
+    it('should focus inputs, selects, and textareas when a fastclick is triggered', function () {
+      var instance, node, getBoundingClientRectStub, focusSpy;
 
-      var getBoundingClientRectStub = stub(node, 'getBoundingClientRect', getBoundingClientRect);
-      var focusSpy = spy(node, 'focus');
+      for (var i = 0; i < specialTypes.length; i += 1) {
+        var type = specialTypes[i];
 
-      TestUtils.Simulate.touchStart(
-        node,
-        {
-          type: 'touchstart',
-          touches: touches
+        if (type !== 'label') {
+          instance = TestUtils.renderIntoDocument(fastclickCreateElement(type));
+          node = ReactDOM.findDOMNode(instance);
+
+          getBoundingClientRectStub = stub(node, 'getBoundingClientRect', getBoundingClientRect);
+          focusSpy = spy(node, 'focus');
+
+          TestUtils.Simulate.touchStart(
+            node,
+            {
+              type: 'touchstart',
+              touches: touches
+            }
+          );
+
+          TestUtils.Simulate.touchEnd(
+            node,
+            {
+              type: 'touchend',
+              touches: null
+            }
+          );
+
+          expect(focusSpy).to.have.been.calledOnce;
+
+          TestUtils.Simulate.click(
+            node,
+            {
+              type: 'click'
+            }
+          );
+
+          expect(focusSpy).to.have.been.calledOnce;
+
+          getBoundingClientRectStub.restore();
         }
-      );
-
-      TestUtils.Simulate.touchEnd(
-        node,
-        {
-          type: 'touchend',
-          touches: null
-        }
-      );
-
-      expect(focusSpy).to.have.been.calledOnce;
-
-      TestUtils.Simulate.click(
-        node,
-        {
-          type: 'click'
-        }
-      );
-
-      expect(focusSpy).to.have.been.calledOnce;
-
-      getBoundingClientRectStub.restore();
+      }
     });
 
   });

@@ -423,6 +423,47 @@ describe('react-fastclick', function () {
       }
     });
 
+    it('should focus an input inside a label', function () {
+      var instance = TestUtils.renderIntoDocument(
+        fastclickCreateElement('label', null, fastclickCreateElement('input'))
+      );
+      var label = ReactDOM.findDOMNode(instance);
+      var input = label.getElementsByTagName('input')[0];
+
+      var getBoundingClientRectStub = stub(label, 'getBoundingClientRect', getBoundingClientRect);
+      var focusSpy = spy(input, 'focus');
+
+      TestUtils.Simulate.touchStart(
+        label,
+        {
+          type: 'touchstart',
+          touches: touches
+        }
+      );
+
+      TestUtils.Simulate.touchEnd(
+        label,
+        {
+          type: 'touchend',
+          touches: null
+        }
+      );
+
+      expect(focusSpy).to.have.been.calledOnce;
+
+      TestUtils.Simulate.click(
+        label,
+        {
+          type: 'click'
+        }
+      );
+
+      expect(focusSpy).to.have.been.calledOnce;
+
+      getBoundingClientRectStub.restore();
+      focusSpy.restore();
+    });
+
   });
 
 });

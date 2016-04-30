@@ -458,6 +458,47 @@ describe('react-fastclick', function () {
       focusSpy.restore();
     });
 
+    it('should not focus a disabled input inside a label', function () {
+      var node = renderIntoApp(
+        fastclickCreateElement('label', null, fastclickCreateElement('input', {disabled: true}))
+      );
+      var label = node;
+      var input = label.getElementsByTagName('input')[0];
+
+      var getBoundingClientRectStub = stub(label, 'getBoundingClientRect', getBoundingClientRect);
+      var focusSpy = spy(input, 'focus');
+
+      TestUtils.Simulate.touchStart(
+        label,
+        {
+          type: 'touchstart',
+          touches: touches
+        }
+      );
+
+      TestUtils.Simulate.touchEnd(
+        label,
+        {
+          type: 'touchend',
+          touches: null
+        }
+      );
+
+      expect(focusSpy).not.to.have.been.calledOnce;
+
+      TestUtils.Simulate.click(
+        label,
+        {
+          type: 'click'
+        }
+      );
+
+      expect(focusSpy).not.to.have.been.calledOnce;
+
+      getBoundingClientRectStub.restore();
+      focusSpy.restore();
+    });
+
     it('should focus an input for a label', function () {
       var node = renderIntoApp(
         fastclickCreateElement(

@@ -593,6 +593,68 @@ describe('react-fastclick', function () {
       focusSpy.restore();
     });
 
+    it('should gracefully handle no input inside a label', function () {
+      var node = renderIntoApp(fastclickCreateElement('label'));
+
+      var getBoundingClientRectStub = stub(node, 'getBoundingClientRect', getBoundingClientRect);
+
+      TestUtils.Simulate.touchStart(
+        node,
+        {
+          type: 'touchstart',
+          touches: touches
+        }
+      );
+
+      TestUtils.Simulate.touchEnd(
+        node,
+        {
+          type: 'touchend',
+          touches: null
+        }
+      );
+
+      TestUtils.Simulate.click(
+        node,
+        {
+          type: 'click'
+        }
+      );
+
+      getBoundingClientRectStub.restore();
+    });
+
+    it('should gracefully handle no input for a label', function () {
+      var node = renderIntoApp(fastclickCreateElement('label', {htmlFor: 'my-input'}));
+
+      var getBoundingClientRectStub = stub(node, 'getBoundingClientRect', getBoundingClientRect);
+
+      TestUtils.Simulate.touchStart(
+        node,
+        {
+          type: 'touchstart',
+          touches: touches
+        }
+      );
+
+      TestUtils.Simulate.touchEnd(
+        node,
+        {
+          type: 'touchend',
+          touches: null
+        }
+      );
+
+      TestUtils.Simulate.click(
+        node,
+        {
+          type: 'click'
+        }
+      );
+
+      getBoundingClientRectStub.restore();
+    });
+
   });
 
 });

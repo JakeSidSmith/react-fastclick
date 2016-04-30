@@ -4,7 +4,7 @@
   "description": "Fast Touch Events for React",
   "main": "lib/index.js",
   "scripts": {
-    "mocha": "istanbul cover node_modules/mocha/bin/_mocha -- --require scripts/test-setup.js --bail --recursive tests",
+    "mocha": "istanbul cover node_modules/mocha/bin/_mocha -- --require tests/helpers/test-setup.js --bail --recursive tests",
     "eslint": "eslint -c node_modules/eslintrc/.eslintrc-es5 index.js scripts && eslint -c node_modules/eslintrc/.eslintrc-es5-mocha tests",
     "test": "npm run eslint && npm run mocha"
   },

@@ -372,6 +372,7 @@ describe('react-fastclick', function () {
           expect(focusSpy).to.have.been.calledOnce;
 
           getBoundingClientRectStub.restore();
+          focusSpy.restore();
         }
       }
     });
@@ -405,7 +406,7 @@ describe('react-fastclick', function () {
             }
           );
 
-          expect(focusSpy).not.to.have.been.calledOnce;
+          expect(focusSpy).not.to.have.been.called;
 
           TestUtils.Simulate.click(
             node,
@@ -414,9 +415,10 @@ describe('react-fastclick', function () {
             }
           );
 
-          expect(focusSpy).not.to.have.been.calledOnce;
+          expect(focusSpy).not.to.have.been.called;
 
           getBoundingClientRectStub.restore();
+          focusSpy.restore();
         }
       }
     });

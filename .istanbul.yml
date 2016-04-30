@@ -4,5 +4,5 @@ instrumentation:
     extensions:
         - .js
     default-excludes: true
-    excludes: []
+    excludes: ['tests/helpers']
     include-all-sources: true

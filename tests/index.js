@@ -5,7 +5,7 @@ var sinon = require('sinon');
 var spy = sinon.spy;
 var stub = sinon.stub;
 var TestUtils = require('react-addons-test-utils');
-var ReactDOM = require('react-dom');
+var renderIntoApp = require('./helpers/render-into-app');
 
 describe('react-fastclick', function () {
 
@@ -113,12 +113,12 @@ describe('react-fastclick', function () {
         onClick: spy()
       };
 
-      var instance = TestUtils.renderIntoDocument(fastclickCreateElement('div', props));
+      var node = renderIntoApp(fastclickCreateElement('div', props));
 
       for (var key in props) {
         var mouseEvent = handlerKeyToSimulatedEventKey(key);
 
-        TestUtils.Simulate[mouseEvent](instance);
+        TestUtils.Simulate[mouseEvent](node);
 
         expect(props[key]).to.have.been.calledOnce;
       }
@@ -136,13 +136,13 @@ describe('react-fastclick', function () {
         onTouchEnd: spy()
       };
 
-      var instance = TestUtils.renderIntoDocument(fastclickCreateElement('div', props));
+      var node = renderIntoApp(fastclickCreateElement('div', props));
 
       for (var key in props) {
         if (key !== 'onClick') {
           var touchEvent = handlerKeyToSimulatedEventKey(key);
 
-          TestUtils.Simulate[touchEvent](instance, {touches: [{}]});
+          TestUtils.Simulate[touchEvent](node, {touches: [{}]});
 
           expect(props[key]).to.have.been.calledOnce;
         }
@@ -154,8 +154,7 @@ describe('react-fastclick', function () {
         onClick: spy()
       };
 
-      var instance = TestUtils.renderIntoDocument(fastclickCreateElement('div', props));
-      var node = ReactDOM.findDOMNode(instance);
+      var node = renderIntoApp(fastclickCreateElement('div', props));
 
       var getBoundingClientRectStub = stub(node, 'getBoundingClientRect', getBoundingClientRect);
 
@@ -194,8 +193,7 @@ describe('react-fastclick', function () {
         onClick: spy()
       };
 
-      var instance = TestUtils.renderIntoDocument(fastclickCreateElement('div', props));
-      var node = ReactDOM.findDOMNode(instance);
+      var node = renderIntoApp(fastclickCreateElement('div', props));
 
       var getBoundingClientRectStub = stub(node, 'getBoundingClientRect', getBoundingClientRect);
 
@@ -234,8 +232,7 @@ describe('react-fastclick', function () {
         onClick: spy()
       };
 
-      var instance = TestUtils.renderIntoDocument(fastclickCreateElement('div', props));
-      var node = ReactDOM.findDOMNode(instance);
+      var node = renderIntoApp(fastclickCreateElement('div', props));
 
       var getBoundingClientRectStub = stub(node, 'getBoundingClientRect', getBoundingClientRect);
 
@@ -287,8 +284,7 @@ describe('react-fastclick', function () {
         onClick: spy()
       };
 
-      var instance = TestUtils.renderIntoDocument(fastclickCreateElement('div', props));
-      var node = ReactDOM.findDOMNode(instance);
+      var node = renderIntoApp(fastclickCreateElement('div', props));
 
       var getBoundingClientRectStub = stub(node, 'getBoundingClientRect', getBoundingClientRect);
 
@@ -332,14 +328,13 @@ describe('react-fastclick', function () {
   describe('special elements', function () {
 
     it('should focus inputs, selects, and textareas when a fastclick is triggered', function () {
-      var instance, node, getBoundingClientRectStub, focusSpy;
+      var node, getBoundingClientRectStub, focusSpy;
 
       for (var i = 0; i < specialTypes.length; i += 1) {
         var type = specialTypes[i];
 
         if (type !== 'label') {
-          instance = TestUtils.renderIntoDocument(fastclickCreateElement(type));
-          node = ReactDOM.findDOMNode(instance);
+          node = renderIntoApp(fastclickCreateElement(type));
 
           getBoundingClientRectStub = stub(node, 'getBoundingClientRect', getBoundingClientRect);
           focusSpy = spy(node, 'focus');
@@ -378,14 +373,13 @@ describe('react-fastclick', function () {
     });
 
     it('should not focus inputs, selects, and textareas if they are disabled', function () {
-      var instance, node, getBoundingClientRectStub, focusSpy;
+      var node, getBoundingClientRectStub, focusSpy;
 
       for (var i = 0; i < specialTypes.length; i += 1) {
         var type = specialTypes[i];
 
         if (type !== 'label') {
-          instance = TestUtils.renderIntoDocument(fastclickCreateElement(type, {disabled: true}));
-          node = ReactDOM.findDOMNode(instance);
+          node = renderIntoApp(fastclickCreateElement(type, {disabled: true}));
 
           getBoundingClientRectStub = stub(node, 'getBoundingClientRect', getBoundingClientRect);
           focusSpy = spy(node, 'focus');
@@ -424,10 +418,10 @@ describe('react-fastclick', function () {
     });
 
     it('should focus an input inside a label', function () {
-      var instance = TestUtils.renderIntoDocument(
+      var node = renderIntoApp(
         fastclickCreateElement('label', null, fastclickCreateElement('input'))
       );
-      var label = ReactDOM.findDOMNode(instance);
+      var label = node;
       var input = label.getElementsByTagName('input')[0];
 
       var getBoundingClientRectStub = stub(label, 'getBoundingClientRect', getBoundingClientRect);

@@ -7,7 +7,7 @@
   var sinonChai = require('sinon-chai');
 
   // Jsdom document & window
-  var doc = jsdom.jsdom('<!doctype html><html><body></body></html>');
+  var doc = jsdom.jsdom('<!doctype html><html><body><div id="app"></div></body></html>');
   var win = doc.defaultView;
 
   // Add to global

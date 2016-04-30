@@ -189,6 +189,46 @@ describe('react-fastclick', function () {
       getBoundingClientRectStub.restore();
     });
 
+    it('should not trigger the click handler if multiple touches', function () {
+      var props = {
+        onClick: spy()
+      };
+
+      var instance = TestUtils.renderIntoDocument(fastclickCreateElement('div', props));
+      var node = ReactDOM.findDOMNode(instance);
+
+      var getBoundingClientRectStub = stub(node, 'getBoundingClientRect', getBoundingClientRect);
+
+      TestUtils.Simulate.touchStart(
+        node,
+        {
+          type: 'touchstart',
+          touches: [touches[0], touches[0]]
+        }
+      );
+
+      TestUtils.Simulate.touchEnd(
+        node,
+        {
+          type: 'touchend',
+          touches: touches
+        }
+      );
+
+      expect(props.onClick).not.to.have.been.called;
+
+      TestUtils.Simulate.click(
+        node,
+        {
+          type: 'click'
+        }
+      );
+
+      expect(props.onClick).not.to.have.been.called;
+
+      getBoundingClientRectStub.restore();
+    });
+
   });
 
 });

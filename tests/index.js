@@ -377,7 +377,7 @@ describe('react-fastclick', function () {
       }
     });
 
-    it('should focus not inputs, selects, and textareas if they are disabled', function () {
+    it('should not focus inputs, selects, and textareas if they are disabled', function () {
       var instance, node, getBoundingClientRectStub, focusSpy;
 
       for (var i = 0; i < specialTypes.length; i += 1) {

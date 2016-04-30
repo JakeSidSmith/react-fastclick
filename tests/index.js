@@ -16,6 +16,24 @@ describe('react-fastclick', function () {
     return simulatedEventKey.charAt(0).toLowerCase() + simulatedEventKey.substring(1);
   }
 
+  function getBoundingClientRect () {
+    return {
+      top: 25,
+      left: 25,
+      right: 75,
+      bottom: 75,
+      width: 50,
+      height: 50
+    };
+  }
+
+  var touches = [
+    {
+      clientX: 50,
+      clientY: 50
+    }
+  ];
+
   var specialTypes = [
     'input',
     'textarea',
@@ -130,24 +148,6 @@ describe('react-fastclick', function () {
         }
       }
     });
-
-    function getBoundingClientRect () {
-      return {
-        top: 25,
-        left: 25,
-        right: 75,
-        bottom: 75,
-        width: 50,
-        height: 50
-      };
-    }
-
-    var touches = [
-      {
-        clientX: 50,
-        clientY: 50
-      }
-    ];
 
     it('should trigger the click handler when a fastclick happens', function () {
       var props = {
@@ -323,6 +323,47 @@ describe('react-fastclick', function () {
       );
 
       expect(props.onClick).not.to.have.been.called;
+
+      getBoundingClientRectStub.restore();
+    });
+
+  });
+
+  describe('special elements', function () {
+
+    it('should focus an input when a fastclick is triggered', function () {
+      var instance = TestUtils.renderIntoDocument(fastclickCreateElement('input'));
+      var node = ReactDOM.findDOMNode(instance);
+
+      var getBoundingClientRectStub = stub(node, 'getBoundingClientRect', getBoundingClientRect);
+      var focusSpy = spy(node, 'focus');
+
+      TestUtils.Simulate.touchStart(
+        node,
+        {
+          type: 'touchstart',
+          touches: touches
+        }
+      );
+
+      TestUtils.Simulate.touchEnd(
+        node,
+        {
+          type: 'touchend',
+          touches: null
+        }
+      );
+
+      expect(focusSpy).to.have.been.calledOnce;
+
+      TestUtils.Simulate.click(
+        node,
+        {
+          type: 'click'
+        }
+      );
+
+      expect(focusSpy).to.have.been.calledOnce;
 
       getBoundingClientRectStub.restore();
     });

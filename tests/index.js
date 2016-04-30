@@ -376,6 +376,51 @@ describe('react-fastclick', function () {
       }
     });
 
+    it('should focus not inputs, selects, and textareas if they are disabled', function () {
+      var instance, node, getBoundingClientRectStub, focusSpy;
+
+      for (var i = 0; i < specialTypes.length; i += 1) {
+        var type = specialTypes[i];
+
+        if (type !== 'label') {
+          instance = TestUtils.renderIntoDocument(fastclickCreateElement(type, {disabled: true}));
+          node = ReactDOM.findDOMNode(instance);
+
+          getBoundingClientRectStub = stub(node, 'getBoundingClientRect', getBoundingClientRect);
+          focusSpy = spy(node, 'focus');
+
+          TestUtils.Simulate.touchStart(
+            node,
+            {
+              type: 'touchstart',
+              touches: touches
+            }
+          );
+
+          TestUtils.Simulate.touchEnd(
+            node,
+            {
+              type: 'touchend',
+              touches: null
+            }
+          );
+
+          expect(focusSpy).not.to.have.been.calledOnce;
+
+          TestUtils.Simulate.click(
+            node,
+            {
+              type: 'click'
+            }
+          );
+
+          expect(focusSpy).not.to.have.been.calledOnce;
+
+          getBoundingClientRectStub.restore();
+        }
+      }
+    });
+
   });
 
 });

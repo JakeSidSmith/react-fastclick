@@ -1,10 +1,12 @@
 {
   "name": "react-fastclick",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Fast Touch Events for React",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "jshint index.js && jscs index.js"
+    "mocha": "istanbul cover node_modules/mocha/bin/_mocha -- --require tests/helpers/test-setup.js --bail --recursive tests",
+    "eslint": "eslint -c node_modules/eslintrc/.eslintrc-es5 lib tests/helpers && eslint -c node_modules/eslintrc/.eslintrc-es5-mocha tests",
+    "test": "npm run eslint && npm run mocha"
   },
   "repository": {
     "type": "git",
@@ -30,60 +32,14 @@
     "react": ">=0.12.0"
   },
   "devDependencies": {
-    "jscs": "=2.8.0",
-    "jshint": "=2.9.1"
-  },
-  "jshintConfig": {
-    "browserify": true,
-    "unused": true,
-    "undef": true,
-    "globals": {
-      "console": false
-    }
-  },
-  "jscsConfig": {
-    "disallowMultipleVarDecl": "exceptUndefined",
-    "validateQuoteMarks": {
-      "mark": "'",
-      "escape": false
-    },
-    "validateParameterSeparator": ", ",
-    "validateIndentation": 2,
-    "requireSpacesInFunction": {
-      "beforeOpeningRoundBrace": true,
-      "beforeOpeningCurlyBrace": true
-    },
-    "requireSpacesInConditionalExpression": {
-      "afterTest": true,
-      "beforeConsequent": true,
-      "afterConsequent": true,
-      "beforeAlternate": true
-    },
-    "disallowTrailingWhitespace": true,
-    "maximumLineLength": 100,
-    "requireCurlyBraces": [
-      "if",
-      "else",
-      "for",
-      "while",
-      "do",
-      "try",
-      "catch"
-    ],
-    "disallowMixedSpacesAndTabs": true,
-    "requireSpaceBeforeBinaryOperators": true,
-    "safeContextKeyword": [
-      "self"
-    ],
-    "disallowMultipleLineBreaks": true,
-    "disallowMultipleLineStrings": true,
-    "disallowSpaceAfterObjectKeys": true,
-    "disallowNewlineBeforeBlockStatements": true,
-    "disallowTrailingComma": true,
-    "requireCommaBeforeLineBreak": true,
-    "requireSpaceBetweenArguments": true,
-    "requireSpaceBeforeBlockStatements": true,
-    "requireSpaceBeforeObjectValues": true,
-    "requireSpacesInForStatement": true
+    "chai": "=3.5.0",
+    "eslintrc": "git+https://github.com/JakeSidSmith/eslintrc.git#v0.0.1",
+    "istanbul": "=1.0.0-alpha.2",
+    "jsdom": "=8.4.1",
+    "mocha": "=2.4.5",
+    "react-addons-test-utils": ">=0.12.0",
+    "react-dom": ">=0.12.0",
+    "sinon": "=1.17.3",
+    "sinon-chai": "=2.8.0"
   }
 }

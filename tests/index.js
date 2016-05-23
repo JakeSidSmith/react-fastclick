@@ -657,4 +657,55 @@ describe('react-fastclick', function () {
 
   });
 
+  describe('events', function () {
+
+    it('should persist events if they are to be mutated', function () {
+      var props = {
+        onClick: spy()
+      };
+      var node = renderIntoApp(fastclickCreateElement('div', props));
+
+      var getBoundingClientRectStub = stub(node, 'getBoundingClientRect', getBoundingClientRect);
+      var persistSpy = spy();
+
+      TestUtils.Simulate.touchStart(
+        node,
+        {
+          type: 'touchstart',
+          touches: touches,
+          persist: persistSpy
+        }
+      );
+
+      expect(persistSpy).not.to.have.been.called;
+
+      TestUtils.Simulate.touchEnd(
+        node,
+        {
+          type: 'touchend',
+          touches: null,
+          persist: persistSpy
+        }
+      );
+
+      // Properties copied onto event from stored positions, and fake click event properties
+      expect(persistSpy).to.have.been.calledTwice;
+      persistSpy.reset();
+
+      TestUtils.Simulate.click(
+        node,
+        {
+          type: 'click',
+          persist: persistSpy
+        }
+      );
+
+      expect(persistSpy).not.to.have.been.called;
+      expect(props.onClick).to.have.been.calledOnce;
+
+      getBoundingClientRectStub.restore();
+    });
+
+  });
+
 });

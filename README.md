@@ -66,4 +66,6 @@ Either target `html, body` (to prevent the flickering on all elements) or target
 
 ## Support
 
+React Fastclick 2.1.2 has been tested with React 15, and should support older versions listed below.
+
 React Fastclick version 2.x.x has been tested with React 0.12, 0.13 and 0.14, and should work with even older versions.

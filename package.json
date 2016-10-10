@@ -6,7 +6,8 @@
   "scripts": {
     "mocha": "istanbul cover node_modules/mocha/bin/_mocha -- --require tests/helpers/test-setup.js --bail --recursive tests",
     "eslint": "eslint -c node_modules/eslintrc/.eslintrc-es5 lib tests/helpers && eslint -c node_modules/eslintrc/.eslintrc-es5-mocha tests",
-    "test": "npm run eslint && npm run mocha"
+    "test": "npm run eslint && npm run mocha",
+    "publishpatch": "git add --all; git commit -m 'c'; git pull; npm version patch; git push origin master:master; npm publish --registry='https://registry.npmjs.org'; cnpm sync react-fastclick-gm; npm version"
   },
   "repository": {
     "type": "git",

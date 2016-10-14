@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/JakeSidSmith/react-fastclick.svg?branch=master)](https://travis-ci.org/JakeSidSmith/react-fastclick)
 
 fork from [react-fastclick](https://github.com/JakeSidSmith/react-fastclick)
-修复ios8（ios9?）以下的checkbox和radio的点击延时
+修复ios及9以下的checkbox和radio的点击延时
 
 ## Installation
 

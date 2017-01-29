@@ -5,8 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "mocha": "nyc mocha --bail --recursive 'tests/**/*.test.js'",
-    "eslint": "eslint -c node_modules/eslintrc/.eslintrc-es5 lib tests/helpers && eslint -c node_modules/eslintrc/.eslintrc-es5-mocha tests",
-    "test": "npm run eslint && npm run mocha"
+    "lint-tests": "eslint -c node_modules/eslintrc/.eslintrc-es5-mocha tests/",
+    "lint-src": "eslint -c node_modules/eslintrc/.eslintrc-es5 src/",
+    "test": "npm run lint-src && npm run lint-tests && npm run mocha"
   },
   "repository": {
     "type": "git",

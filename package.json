@@ -28,9 +28,10 @@
     "url": "https://github.com/JakeSidSmith/react-fastclick/issues"
   },
   "homepage": "https://github.com/JakeSidSmith/react-fastclick",
-  "dependencies": {
-    "react": ">=0.12.0"
+  "peerDependencies": {
+    "react": "*"
   },
+  "dependencies": {},
   "devDependencies": {
     "chai": "=3.5.0",
     "eslintrc": "git+https://github.com/JakeSidSmith/eslintrc.git#v0.0.1",

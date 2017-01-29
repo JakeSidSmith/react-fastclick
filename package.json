@@ -2,9 +2,9 @@
   "name": "react-fastclick",
   "version": "2.1.2",
   "description": "Fast Touch Events for React",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "scripts": {
-    "mocha": "istanbul cover node_modules/mocha/bin/_mocha -- --require tests/helpers/test-setup.js --bail --recursive tests",
+    "mocha": "nyc mocha --bail --recursive 'tests/**/*.test.js'",
     "eslint": "eslint -c node_modules/eslintrc/.eslintrc-es5 lib tests/helpers && eslint -c node_modules/eslintrc/.eslintrc-es5-mocha tests",
     "test": "npm run eslint && npm run mocha"
   },
@@ -35,9 +35,9 @@
   "devDependencies": {
     "chai": "=3.5.0",
     "eslintrc": "git+https://github.com/JakeSidSmith/eslintrc.git#v0.0.1",
-    "istanbul": "=1.0.0-alpha.2",
     "jsdom": "=8.4.1",
     "mocha": "=2.4.5",
+    "nyc": "=10.1.2",
     "react": "=15.4.2",
     "react-addons-test-utils": "=15.4.2",
     "react-dom": "=15.4.2",

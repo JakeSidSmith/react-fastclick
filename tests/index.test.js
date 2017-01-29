@@ -54,7 +54,7 @@ describe('react-fastclick', function () {
   beforeEach(function () {
     // Clear module cache
     delete require.cache[require.resolve('react')];
-    delete require.cache[require.resolve('../lib/index')];
+    delete require.cache[require.resolve('../src/index')];
   });
 
   it('should redefine React.createElement', function () {
@@ -63,7 +63,7 @@ describe('react-fastclick', function () {
 
     expect(originalCreateElement).to.equal(theSameCreateElement);
 
-    require('../lib/index');
+    require('../src/index');
     fastclickCreateElement = require('react').createElement;
 
     expect(originalCreateElement).not.to.equal(fastclickCreateElement);

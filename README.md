@@ -15,20 +15,22 @@ npm install react-fastclick
 
 ## Usage
 
-Include `react-fastclick` in your main javascript file before any of your components are created, and you're done.
+Initialize `react-fastclick` in your main javascript file before any of your components are created, and you're done.
 
 Now any calls to onClick  or elements with special functionality, such as inputs, will have fast touch events added automatically - no need to write any additional listeners.
 
 **ES6**
 
 ```javascript
-import 'react-fastclick';
+import initReactFastclick from 'react-fastclick';
+initReactFastclick();
 ```
 
 **ES5**
 
 ```javascript
-require('react-fastclick');
+var initReactFastclick = require('react-fastclick');
+initReactFastclick();
 ```
 
 ## Notes

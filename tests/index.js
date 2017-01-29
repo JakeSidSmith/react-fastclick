@@ -63,7 +63,7 @@ describe('react-fastclick', function () {
 
     expect(originalCreateElement).to.equal(theSameCreateElement);
 
-    require('../lib/index');
+    require('../lib/index')();
     fastclickCreateElement = require('react').createElement;
 
     expect(originalCreateElement).not.to.equal(fastclickCreateElement);

@@ -1,8 +1,0 @@
-verbose: false
-instrumentation:
-    root: 'lib'
-    extensions:
-        - .js
-    default-excludes: true
-    excludes: []
-    include-all-sources: true

@@ -1,6 +1,4 @@
-# React Fastclick
-[![Build Status](https://travis-ci.org/JakeSidSmith/react-fastclick.svg?branch=master)](https://travis-ci.org/JakeSidSmith/react-fastclick)
-
+# React Fastclick [![CircleCI](https://circleci.com/gh/JakeSidSmith/react-fastclick.svg?style=svg)](https://circleci.com/gh/JakeSidSmith/react-fastclick)
 **Instantly make your desktop / hybrid apps more responsive on touch devices.**
 
 React Fastclick automatically adds fastclick touch events to elements with onClick attributes (and those that require special functionality, such as inputs) to prevent the delay that occurs on some touch devices.

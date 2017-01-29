@@ -2,11 +2,12 @@
   "name": "react-fastclick",
   "version": "3.0.0",
   "description": "Fast Touch Events for React",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "scripts": {
-    "mocha": "istanbul cover node_modules/mocha/bin/_mocha -- --require tests/helpers/test-setup.js --bail --recursive tests",
-    "eslint": "eslint -c node_modules/eslintrc/.eslintrc-es5 lib tests/helpers && eslint -c node_modules/eslintrc/.eslintrc-es5-mocha tests",
-    "test": "npm run eslint && npm run mocha"
+    "mocha": "nyc mocha --bail --recursive 'tests/**/*.test.js'",
+    "lint-tests": "eslint -c node_modules/eslintrc/.eslintrc-es5-mocha tests/",
+    "lint-src": "eslint -c node_modules/eslintrc/.eslintrc-es5 src/",
+    "test": "npm run lint-src && npm run lint-tests && npm run mocha"
   },
   "repository": {
     "type": "git",
@@ -28,18 +29,23 @@
     "url": "https://github.com/JakeSidSmith/react-fastclick/issues"
   },
   "homepage": "https://github.com/JakeSidSmith/react-fastclick",
-  "dependencies": {
-    "react": ">=0.12.0"
+  "peerDependencies": {
+    "react": "*"
   },
+  "dependencies": {},
   "devDependencies": {
     "chai": "=3.5.0",
     "eslintrc": "git+https://github.com/JakeSidSmith/eslintrc.git#v0.0.1",
-    "istanbul": "=1.0.0-alpha.2",
     "jsdom": "=8.4.1",
     "mocha": "=2.4.5",
-    "react-addons-test-utils": ">=0.12.0",
-    "react-dom": ">=0.12.0",
+    "nyc": "=10.1.2",
+    "react": "=15.4.2",
+    "react-addons-test-utils": "=15.4.2",
+    "react-dom": "=15.4.2",
     "sinon": "=1.17.3",
     "sinon-chai": "=2.8.0"
+  },
+  "engines": {
+    "node": "6.9.4"
   }
 }

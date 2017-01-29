@@ -1,0 +1,26 @@
+{
+  "lines": 90,
+  "statements": 90,
+  "functions": 90,
+  "branches": 90,
+  "require": [
+    "./tests/helpers/test-setup.js"
+  ],
+  "include": [
+    "src/**/*.js"
+  ],
+  "exclude": [],
+  "extension": [
+    ".js"
+  ],
+  "reporter": [
+    "lcov",
+    "text-summary"
+  ],
+  "cache": true,
+  "all": true,
+  "check-coverage": true,
+  "sourceMap": true,
+  "instrument": true,
+  "report-dir": "./coverage"
+}

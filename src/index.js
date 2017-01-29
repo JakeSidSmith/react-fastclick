@@ -238,6 +238,7 @@
     };
   };
 
+  /* istanbul ignore next */
   // Export for commonjs / browserify
   if (typeof exports === 'object' && typeof module !== 'undefined') {
     var React = require('react');

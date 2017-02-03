@@ -1,6 +1,6 @@
 {
   "name": "react-fastclick",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Fast Touch Events for React",
   "main": "src/index.js",
   "scripts": {
@@ -46,6 +46,6 @@
     "sinon-chai": "=2.8.0"
   },
   "engines": {
-    "node": "6.9.4"
+    "node": "*"
   }
 }

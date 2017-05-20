@@ -108,10 +108,18 @@
       };
 
       var onMouseEvent = function (callback, event) {
+        var touched = !noTouchHappened();
+
+        // Prevent mouse events on other elements
+        if (touched && event.target !== touchEvents.target) {
+          event.preventDefault();
+        }
+
         // Prevent any mouse events if we touched recently
-        if (typeof callback === 'function' && noTouchHappened()) {
+        if (typeof callback === 'function' && !touched) {
           callback(event);
         }
+
         if (event.type === 'click') {
           touchEvents.invalid = false;
           touchEvents.touched = false;
@@ -123,6 +131,7 @@
         touchEvents.invalid = false;
         touchEvents.moved = false;
         touchEvents.touched = true;
+        touchEvents.target = event.target;
         touchEvents.lastTouchDate = new Date().getTime();
 
         copyTouchKeys(event.touches[0], touchEvents.downPos);

@@ -124,6 +124,81 @@ describe('react-fastclick', function () {
       }
     });
 
+    it('should not prevent default on same target', function () {
+      var event = {
+        target: 'target',
+        touches: [],
+        preventDefault: spy()
+      };
+
+      var props = {
+        onTouchStart: spy(),
+        onTouchMove: spy(),
+        onTouchEnd: spy(),
+        onMouseDown: spy(),
+        onMouseMove: spy(),
+        onMouseUp: spy(),
+        onClick: spy()
+      };
+
+      var node = renderIntoApp(fastclickCreateElement('div', props));
+
+      for (var key in props) {
+        var eventType = handlerKeyToSimulatedEventKey(key);
+
+        TestUtils.Simulate[eventType](node, event);
+
+        if (eventType.indexOf('touch') >= 0) {
+          expect(props[key]).to.have.been.calledOnce;
+        } else {
+          expect(props[key]).not.to.have.been.called;
+        }
+      }
+
+      expect(event.preventDefault.callCount).to.equal(0);
+    });
+
+    it('should prevent default on different target', function () {
+      var event1 = {
+        target: 'target1',
+        touches: [],
+        preventDefault: spy()
+      };
+
+      var event2 = {
+        target: 'target2',
+        touches: [],
+        preventDefault: spy()
+      };
+
+      var props = {
+        onTouchStart: spy(),
+        onTouchMove: spy(),
+        onTouchEnd: spy(),
+        onMouseDown: spy(),
+        onMouseMove: spy(),
+        onMouseUp: spy(),
+        onClick: spy()
+      };
+
+      var node = renderIntoApp(fastclickCreateElement('div', props));
+
+      for (var key in props) {
+        var eventType = handlerKeyToSimulatedEventKey(key);
+
+        if (eventType.indexOf('touch') >= 0) {
+          TestUtils.Simulate[eventType](node, event1);
+          expect(props[key]).to.have.been.calledOnce;
+        } else {
+          TestUtils.Simulate[eventType](node, event2);
+          expect(props[key]).not.to.have.been.called;
+        }
+      }
+
+      expect(event1.preventDefault.callCount).to.equal(0);
+      expect(event2.preventDefault.callCount).to.equal(4);
+    });
+
   });
 
   describe('touch events', function () {

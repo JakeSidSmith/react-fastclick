@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -e
+
+mkdir -p examples/build/js/
+mkdir -p examples/build/css/
+
+concurrently --kill-others \
+  --prefix='name' \
+  --names='watch-js   ,http-server' \
+  --prefix-colors='red,green' \
+  'watchify -d -t babelify examples/src/js/index.js -o examples/build/js/index.js -v' \
+  'http-server -c-0 examples/ -o'

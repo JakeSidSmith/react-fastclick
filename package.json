@@ -54,8 +54,5 @@
     "sinon": "=1.17.3",
     "sinon-chai": "=2.8.0",
     "watchify": "3.9.0"
-  },
-  "engines": {
-    "node": "*"
   }
 }

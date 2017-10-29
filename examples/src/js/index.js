@@ -21,6 +21,7 @@ class Home extends React.Component {
     };
 
     this.onChange = this.onChange.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
   onChange (event) {
@@ -28,6 +29,10 @@ class Home extends React.Component {
       value: event.target.value,
       changeCount: this.state.changeCount + 1
     });
+  }
+
+  onClick (event) {
+    alert(`Fastclick: ${event.fastclick}, Type: ${event.type}`);
   }
 
   render () {
@@ -38,6 +43,9 @@ class Home extends React.Component {
         <p>
           Change count: {this.state.changeCount}
         </p>
+        <button onClick={this.onClick}>
+          Check event type
+        </button>
       </div>
     );
   }

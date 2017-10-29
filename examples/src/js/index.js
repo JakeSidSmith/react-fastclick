@@ -17,11 +17,14 @@ class Home extends React.Component {
 
     this.state = {
       value: '',
-      changeCount: 0
+      changeCount: 0,
+      checkbox: false
     };
 
     this.onChange = this.onChange.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.onChangeCheckbox = this.onChangeCheckbox.bind(this);
+    this.onClickCheckbox = this.onClickCheckbox.bind(this);
   }
 
   onChange (event) {
@@ -33,6 +36,14 @@ class Home extends React.Component {
 
   onClick (event) {
     alert(`Fastclick: ${event.fastclick}, Type: ${event.type}`);
+  }
+
+  onChangeCheckbox (event) {
+    console.log(`Change value: ${event.target.value}, Change checked: ${event.target.checked}`);
+  }
+
+  onClickCheckbox (event) {
+    console.log(`Click value: ${event.target.value}, Click checked: ${event.target.checked}`);
   }
 
   onNoop () {
@@ -73,6 +84,14 @@ class Home extends React.Component {
           <a href="#">
             Regular link
           </a>
+        </p>
+        <p>
+          <input
+            type="checkbox"
+            value={this.state.checkbox}
+            onChange={this.onChangeCheckbox}
+            onClick={this.onClickCheckbox}
+          />
         </p>
       </div>
     );

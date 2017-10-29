@@ -228,13 +228,13 @@
         var props = args[1];
 
         var isStringType = type && typeof type === 'string';
-        var notCheckable = props && props.type !== 'checkbox' && props.type !== 'radio';
+        var checkable = props && (props.type === 'checkbox' && props.type === 'radio');
         var hasOnClick = props && typeof props.onClick === 'function';
         var isSpecialType = type in handleType;
 
         // Check if basic element & has onClick prop
         if (
-          isStringType && notCheckable &&
+          isStringType && !checkable &&
           (hasOnClick || isSpecialType)
         ) {
           // Add our own events to props

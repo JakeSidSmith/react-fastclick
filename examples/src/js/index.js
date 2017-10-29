@@ -18,13 +18,15 @@ class Home extends React.Component {
     this.state = {
       value: '',
       changeCount: 0,
-      checkbox: false
+      checkbox: false,
+      index: 0
     };
 
     this.onChange = this.onChange.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onChangeCheckbox = this.onChangeCheckbox.bind(this);
     this.onClickCheckbox = this.onClickCheckbox.bind(this);
+    this.onIncrement = this.onIncrement.bind(this);
   }
 
   onChange (event) {
@@ -54,6 +56,12 @@ class Home extends React.Component {
     return null;
   }
 
+  onIncrement () {
+    this.setState({
+      index: this.state.index + 1
+    });
+  }
+
   render () {
     return (
       <div>
@@ -67,6 +75,11 @@ class Home extends React.Component {
         <p>
           <button onClick={this.onClick}>
             Check event type
+          </button>
+        </p>
+        <p>
+          <button onClick={this.onIncrement}>
+            Increment: {this.state.index}
           </button>
         </p>
         <p>

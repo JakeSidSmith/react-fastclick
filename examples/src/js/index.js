@@ -1,3 +1,5 @@
+alert('Reloaded!');
+
 import initReactFastclick from '../../../src/';
 initReactFastclick();
 

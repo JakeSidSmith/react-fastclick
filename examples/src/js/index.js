@@ -11,11 +11,37 @@ import {
   Link
 } from 'react-router-dom';
 
-const Home = () => (
-  <div>
-    <h2>Home</h2>
-  </div>
-);
+class Home extends React.Component {
+  constructor (props) {
+    super(props);
+
+    this.state = {
+      value: '',
+      changeCount: 0
+    };
+
+    this.onChange = this.onChange.bind(this);
+  }
+
+  onChange (event) {
+    this.setState({
+      value: event.target.value,
+      changeCount: this.state.changeCount + 1
+    });
+  }
+
+  render () {
+    return (
+      <div>
+        <h2>Home</h2>
+        <input type="text" value={this.state.value} onChange={this.onChange} />
+        <p>
+          Change count: {this.state.changeCount}
+        </p>
+      </div>
+    );
+  }
+}
 
 const About = () => (
   <div>

@@ -39,9 +39,8 @@
     "jsdom": "=8.4.1",
     "mocha": "=2.4.5",
     "nyc": "=10.1.2",
-    "react": "=15.4.2",
-    "react-addons-test-utils": "=15.4.2",
-    "react-dom": "=15.4.2",
+    "react": "16.0.0",
+    "react-dom": "16.0.0",
     "sinon": "=1.17.3",
     "sinon-chai": "=2.8.0"
   },

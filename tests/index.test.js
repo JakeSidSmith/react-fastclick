@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 var sinon = require('sinon');
 var spy = sinon.spy;
 var stub = sinon.stub;
-var TestUtils = require('react-addons-test-utils');
+var TestUtils = require('react-dom/test-utils');
 var renderIntoApp = require('./helpers/render-into-app');
 
 describe('react-fastclick', function () {

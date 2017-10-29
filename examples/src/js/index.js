@@ -39,13 +39,27 @@ class Home extends React.Component {
     return (
       <div>
         <h2>Home</h2>
-        <input type="text" value={this.state.value} onChange={this.onChange} />
+        <p>
+          <input type="text" value={this.state.value} onChange={this.onChange} />
+        </p>
         <p>
           Change count: {this.state.changeCount}
         </p>
-        <button onClick={this.onClick}>
-          Check event type
-        </button>
+        <p>
+          <button onClick={this.onClick}>
+            Check event type
+          </button>
+        </p>
+        <p>
+          <Link to="/">
+            React router link
+          </Link>
+        </p>
+        <p>
+          <a href="#">
+            Regular link
+          </a>
+        </p>
       </div>
     );
   }

@@ -35,7 +35,7 @@ class Home extends React.Component {
     alert(`Fastclick: ${event.fastclick}, Type: ${event.type}`);
   }
 
-  noop () {
+  onNoop () {
     return null;
   }
 
@@ -55,7 +55,7 @@ class Home extends React.Component {
           </button>
         </p>
         <p>
-          <button onClick={this.noop}>
+          <button onClick={this.onNoop}>
             Button with onClick
           </button>
         </p>

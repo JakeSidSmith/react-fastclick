@@ -5,6 +5,7 @@
   var jsdom = require('jsdom');
   var chai = require('chai');
   var sinonChai = require('sinon-chai');
+  var polyfillRaf = require('raf').polyfill;
 
   // Jsdom document & window
   var doc = jsdom.jsdom('<!doctype html><html><body><div id="app"></div></body></html>');
@@ -23,5 +24,7 @@
 
   chai.expect();
   chai.use(sinonChai);
+
+  polyfillRaf();
 
 })();

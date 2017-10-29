@@ -228,7 +228,7 @@
         var props = args[1];
 
         var isStringType = type && typeof type === 'string';
-        var checkable = props && (props.type === 'checkbox' && props.type === 'radio');
+        var checkable = props && (props.type === 'checkbox' || props.type === 'radio');
         var hasOnClick = props && typeof props.onClick === 'function';
         var isSpecialType = type in handleType;
 

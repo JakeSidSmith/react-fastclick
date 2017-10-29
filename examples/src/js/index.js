@@ -1,3 +1,6 @@
+import initReactFastclick from '../../../src/';
+initReactFastclick();
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {

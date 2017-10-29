@@ -6,7 +6,7 @@
   "scripts": {
     "start": "./scripts/start",
     "tests": "nyc mocha --bail --recursive 'tests/**/*.test.js'",
-    "lint": "eslint src/ tests/",
+    "lint": "eslint src/ tests/ examples/",
     "test": "npm run lint && npm run tests"
   },
   "repository": {

@@ -40,6 +40,10 @@ class Home extends React.Component {
 
   onChangeCheckbox (event) {
     console.log(`Change value: ${event.target.value}, Change checked: ${event.target.checked}`);
+
+    this.setState({
+      checkbox: event.target.checked
+    });
   }
 
   onClickCheckbox (event) {

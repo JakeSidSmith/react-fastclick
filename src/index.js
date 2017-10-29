@@ -227,10 +227,16 @@
         var type = args[0];
         var props = args[1];
 
+        var isStringType = type && typeof type === 'string';
+        var notCheckable = props && props.type !== 'checkbox' && props.type !== 'radio';
+        var hasOnClick = props && typeof props.onClick === 'function';
+        var isSpecialType = type in handleType;
+
         // Check if basic element & has onClick prop
-        if (type && typeof type === 'string' && (
-          (props && typeof props.onClick === 'function') || handleType[type]
-        )) {
+        if (
+          isStringType && notCheckable &&
+          (hasOnClick || isSpecialType)
+        ) {
           // Add our own events to props
           args[1] = propsWithFastclickEvents(type, props || {});
         }

@@ -64,6 +64,17 @@ Either target `html, body` (to prevent the flickering on all elements) or target
     }
     ```
 
+## Development
+
+You can spin up a simple dev environment by running:
+
+```shell
+npm install
+npm start
+```
+
+This will serve the `examples` directory and setup a watcher for `examples/src/js/index.js` with babel (ES6 and React).
+
 ## Support
 
 React Fastclick 3.x.x has been tested with React 15, but should support older versions also.

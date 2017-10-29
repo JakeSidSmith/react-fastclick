@@ -4,10 +4,9 @@
   "description": "Fast Touch Events for React",
   "main": "src/index.js",
   "scripts": {
-    "mocha": "nyc mocha --bail --recursive 'tests/**/*.test.js'",
-    "lint-tests": "eslint -c node_modules/eslintrc/.eslintrc-es5-mocha tests/",
-    "lint-src": "eslint -c node_modules/eslintrc/.eslintrc-es5 src/",
-    "test": "npm run lint-src && npm run lint-tests && npm run mocha"
+    "tests": "nyc mocha --bail --recursive 'tests/**/*.test.js'",
+    "lint": "eslint src/ tests/",
+    "test": "npm run lint && npm run tests"
   },
   "repository": {
     "type": "git",
@@ -35,7 +34,8 @@
   "dependencies": {},
   "devDependencies": {
     "chai": "=3.5.0",
-    "eslintrc": "git+https://github.com/JakeSidSmith/eslintrc.git#v0.0.1",
+    "eslint": "3.19.0",
+    "eslintrc": "git+https://github.com/JakeSidSmith/eslintrc.git#v2.2.0",
     "jsdom": "=8.4.1",
     "mocha": "=2.4.5",
     "nyc": "=10.1.2",

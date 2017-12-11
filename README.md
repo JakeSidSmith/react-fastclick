@@ -43,7 +43,7 @@ initReactFastclick();
     button: 0,
     type: 'click',
     // Additional key to tell the difference between
-    // a regular click and a flastclick
+    // a regular click and a fastclick
     fastclick: true,
     // From touch positions
     clientX,

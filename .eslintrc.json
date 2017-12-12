@@ -1,0 +1,6 @@
+{
+  "extrends": [
+    "jakesidsmith/commonjs",
+    "jakesidsmith/browser"
+  ]
+}
